@@ -112,5 +112,10 @@ public class Bracket {
         bracket.add(position, s);
     }
 
-
+    /*Hillary Ssemakula 5/1
+     * @param String passwor, the player's password is set to the given parameter */
+    public void setPassword(String password)
+    {
+       this.password = password;
+    }   
 }
