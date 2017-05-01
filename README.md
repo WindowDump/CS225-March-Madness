@@ -2,7 +2,7 @@
 Final Project for CS225 Spring 2017
 
 # Structure of Binary Tree Array
-Here are the actual concrete examples of what indecies in the array will map to what level and subtree of the overall tree.
+Here are the actual concrete examples of what indecies in the array will map to what level and subtree of an overall tree. All of this applies to a single tree. Each bracket has its own tree, and every tree in the program will have the same structure.
 
 ## Indecies and Levels
 In this project, we have a tree with 7 levels, expanding out to 64 leaves.
