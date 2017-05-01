@@ -121,9 +121,17 @@ public class Bracket {
        this.password = password;
     }  
     
-    //returns the player's name
+    /*returns the player's name */
     public String getPlayerName()
     {
         return playerName;
     }
+    
+    /* returns the player's password */
+    public String getPassword()
+    {
+        return password;
+    }
+    
+    
 }
