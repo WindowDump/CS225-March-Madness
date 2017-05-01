@@ -114,13 +114,14 @@ public class Bracket {
         bracket.add(position, s);
     }
 
-    /*Hillary Ssemakula 5/1
+    /******Hillary Ssemakula 5/1********/
      * @param String passwor, the player's password is set to the given parameter */
     public void setPassword(String password)
     {
        this.password = password;
     }  
     
+    //returns the player's name
     public String getPlayerName()
     {
         return playerName;
