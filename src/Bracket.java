@@ -144,16 +144,53 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         return true;
     }
     
-    /* Hillary: checks whether subtree starting at root is complete  INCOMPLETE-MIGHT NEED IMPROVEMENT */
+    /* Hillary: checks whether subtree starting at root is complete  INCOMPLETE-MIGHT NEED IMPROVEMENT
+    * update by matt and hillary 5/2, now works*/
     public boolean isSubtreeComplete(int root)
     {
+        if(bracket.get(root).equals(""))
+            return false;
         int rightChild = 2 * root + 2;
         int leftChild = 2 * root + 1;
-        if(bracket.get(root).equals("")) return false;
-        else if(rightChild < bracket.size()) return isSubtreeComplete(rightChild); 
-        else if(leftChild < bracket.size()) return isSubtreeComplete(rightChild); 
-        
+        //else if(rightChild < bracket.size()) return isSubtreeComplete(rightChild);
+        //else if(leftChild < bracket.size()) return isSubtreeComplete(leftChild);
+        if(leftChild< bracket.size() && rightChild<bracket.size())
+            return isSubtreeComplete(leftChild) && isSubtreeComplete(rightChild);
+
         return true;
+    }
+
+    /**
+     * Matt 5/2
+     * Scores the bracket by assigning points of each correct winner
+     * number of points is based on round
+     * @param master, the master bracket of true winners to which all brackets are compared
+     */
+    public int scoreBracket(Bracket master){
+        int score = 0;
+        if (bracket.get(0).equals(master.getBracket().get(0)))//finals
+            score+=32;
+        for (int i = 1; i < 3; i++) {
+            if (bracket.get(i).equals(master.getBracket().get(i)))//semi
+                score+=16;
+        }
+        for (int i = 3; i < 7; i++) {
+            if (bracket.get(i).equals(master.getBracket().get(i)))//quarters
+                score+=8;
+        }
+        for (int i = 7; i < 15; i++) {
+            if (bracket.get(i).equals(master.getBracket().get(i)))//sweet 16
+            score+=4;
+        }
+        for (int i = 15; i < 31; i++) {
+            if (bracket.get(i).equals(master.getBracket().get(i)))//round of 32
+            score+=2;
+        }
+        for (int i = 31; i < 63; i++) {
+            if (bracket.get(i).equals(master.getBracket().get(i)))//round of 64
+            score+=1;
+        }
+        return score;
     }
 }
 
