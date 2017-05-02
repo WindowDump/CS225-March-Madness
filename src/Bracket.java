@@ -150,8 +150,8 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         int rightChild = 2 * root + 2;
         int leftChild = 2 * root + 1;
         if(bracket.get(root).equals("")) return false;
-        else if(rightChild < bracket.size()) return isSubTreeComplete(rightChild); 
-        else if(leftChild < bracket.size()) return isSubTreeComplete(rightChild); 
+        else if(rightChild < bracket.size()) return isSubtreeComplete(rightChild); 
+        else if(leftChild < bracket.size()) return isSubtreeComplete(rightChild); 
         
         return true;
     }
