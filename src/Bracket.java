@@ -4,10 +4,12 @@ import java.util.ArrayList;
  * Bracket Class
  * Created by Matt and Dan on 5/1/2017.
  */
+//Hillary Ssemakula 5/1
 public class Bracket {
     //Attributes
     ArrayList<String> bracket;
-    String name;
+    private String playerName;
+    private String password;
     static final int EAST_BRACKET = 3;
     static final int WEST_BRACKET = 4;
     static final int NORTH_BRACKET = 5;
@@ -112,5 +114,25 @@ public class Bracket {
         bracket.add(position, s);
     }
 
+    /******Hillary Ssemakula 5/1********/
+     /* @param String passwor, the player's password is set to the given parameter */
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+
+    /*returns the player's name */
+    public String getPlayerName()
+    {
+        return playerName;
+    }
+
+    /* returns the player's password */
+    public String getPassword()
+    {
+        return password;
+    }
+
 
 }
+
