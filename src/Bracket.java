@@ -7,7 +7,7 @@ import java.util.ArrayList;
 //Hillary Ssemakula 5/1
 public class Bracket {
     //Attributes
-    ArrayList<String> bracket;
+    private ArrayList<String> bracket;
     private String playerName;
     private String password;
     static final int EAST_BRACKET = 3;
