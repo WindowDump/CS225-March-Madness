@@ -134,6 +134,20 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     {
         return password;
     }
-
+    
+    /* checks whether there are no empty strings in the bracket, i.e. it's completely filled in */
+    public boolean isComplete()
+    {
+        for(String team: bracket){
+            if(team.equals("")){ return false; }
+        }
+        return true;
+    }
+    
+    /* checks whether subtree starting at root is complete */ ICOMPLETE
+    public ??? isSubtreeComplete(int root)
+    {
+        if(bracket.get(root).equals("")) return false;
+    }
 }
 
