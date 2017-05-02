@@ -117,7 +117,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     }
 
     /******Hillary Ssemakula 5/1********/
-     /* @param String passwor, the player's password is set to the given parameter */
+     /* @param String password, the player's password is set to the given parameter */
     public void setPassword(String password)
     {
         this.password = password;
@@ -129,13 +129,13 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         return playerName;
     }
 
-    /* returns the player's password */
+    /* Hillary: returns the player's password */
     public String getPassword()
     {
         return password;
     }
     
-    /* checks whether there are no empty strings in the bracket, i.e. it's completely filled in */
+    /* Hillary: checks whether there are no empty strings in the bracket, i.e. it's completely filled in */
     public boolean isComplete()
     {
         for(String team: bracket){
@@ -144,10 +144,16 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         return true;
     }
     
-    /* checks whether subtree starting at root is complete */ ICOMPLETE
-    public ??? isSubtreeComplete(int root)
+    /* Hillary: checks whether subtree starting at root is complete  INCOMPLETE-MIGHT NEED IMPROVEMENT */
+    public boolean isSubtreeComplete(int root)
     {
+        int rightChild = 2 * root + 2;
+        int leftChild = 2 * root + 1;
         if(bracket.get(root).equals("")) return false;
+        else if(rightChild <= bracket.size()) return isSubTreeComplete(rightChild); 
+        else if(leftChild <= bracket.size()) return isSubTreeComplete(rightChild); 
+        
+        return true;
     }
 }
 
