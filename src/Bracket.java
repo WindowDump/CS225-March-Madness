@@ -20,6 +20,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     //Constructor
     /**
      *Cosntructor using an ArrayList of strings to start
+     * @param starting, and arraylist containing the 64 teams participating in the tournament
      */
     public Bracket(ArrayList<String> starting){
         bracket = new ArrayList<String>(starting);
@@ -30,6 +31,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
 
     /**
      * Constructor using another Bracket to start
+     * @param starting, master bracket pre-simulation
      */
     public Bracket(Bracket starting){
         /*bracket = new ArrayList<String>();
@@ -38,6 +40,17 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         }*/
         //code above removed and replaced by matt 5/1
         bracket = new ArrayList<String>(starting.getBracket());
+    }
+
+    /**
+     * added by matt 5/2
+     * Constructor that creates a new bracket with a users name
+     * @param starting, master bracket pre-simulation
+     * @param user, name of the new bracket owner
+     */
+    public Bracket(Bracket starting, String user){
+        bracket = new ArrayList<String>(starting.getBracket());
+        playerName = user;
     }
 
     //Methods
@@ -191,6 +204,15 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
             score+=1;
         }
         return score;
+    }
+
+    /**
+     * added by matt 5/2
+     * sets the playerName for the bracket
+     * @param user, name of the player
+     */
+    public void setPlayerName(String user){
+        playerName = user;
     }
 }
 
