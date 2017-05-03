@@ -1,0 +1,211 @@
+EAST
+	Villanova
+	The Wildcats are from Villanova, PA. They known to play a spicy game and bring the fire AYE AYE AYEEEE.
+	1
+	
+	Mt. St. Mary's
+	Another great team from Emmitsburg, MD, the Mountaineers will always climb to the top of whatever sloped obstacle is in their path.
+	16
+	
+	Wisconsin
+	This team from Madison, WI may be annoying but they'll badger their way right to the championship!
+	8
+	
+	Virginia Tech
+	The Hokies are a team rooted in Blacksburg, VA. Not to be confused with the "Hoagies"
+	9
+	
+	Virginia
+	This team wants to be the very best, that no one ever was.
+	5
+	
+	UNCW
+	The Seahawks from the University of North Carolina, Wilmington. What a team. What. A. Team. Go Seahawks!
+	12
+	
+	Florida
+	The Gators can take on anyone, except Steve Erwin... Respect. (or is that crocodiles?)
+	4
+	
+	East Tenn. St.
+	The best part of waking up is Folgers in your cup. Also the Bucaneers are pretty good too.
+	13
+	
+	SMU
+	Rev up your horse and buggies because the mustangs are coming through strong!
+	6
+	
+	USC
+	Not your average contraceptive.
+	11
+	
+	Baylor
+	From Waco, TX, the Bears will give you something to remember.
+	3
+	
+	New Mexico St.
+	
+	14
+	
+	South Carolina
+	7
+	
+	Marquette
+	10
+	
+	Duke
+	2
+	
+	Troy
+	15
+
+MIDWEST
+	Kansas
+	1
+	
+	UC Davis
+	16
+	
+	Miami(Fla.)
+	8
+	
+	Michigan St.
+	9
+	
+	Iowa St.
+	5
+	
+	Nevada
+	12
+	
+	Purdue
+	4
+	
+	Vermont
+	13
+	
+	Creighton
+	6
+	
+	Rhode Island
+	11
+	
+	Oregon
+	3
+	
+	Iona
+	14
+	
+	Michigan
+	7
+	
+	Oklahoma State
+	10
+	
+	Louisville
+	2
+	
+	Jacksonville St.
+	15
+	
+WEST
+	Gonzaga
+	1
+	
+	South Dakota St.
+	16
+	
+	Northwestern
+	8
+	
+	Vanderbilt
+	9
+	
+	Notre Dame
+	5
+	
+	Princeton
+	12
+	
+	West Virginia
+	4
+	
+	Bucknell
+	13
+	
+	Maryland
+	6
+	
+	Xavier
+	11
+	
+	Florida State
+	3
+	
+	FGCU
+	14
+	
+	St. Mary's(Cal.)
+	7
+	
+	VCU
+	10
+	
+	Arizona
+	2
+	
+	North Dakota
+	15
+	
+SOUTH
+	North Carolina
+	1
+	
+	Texas Southern
+	16
+	
+	Arkansas
+	8
+	
+	Seton Hall
+	9
+	
+	Minnesota
+	5
+	
+	Middle Tenn.
+	12
+	
+	Butler
+	4
+	
+	Winthrop
+	13
+	
+	Cincinnati
+	6
+	
+	Kansas St.
+	11
+	
+	UCLA
+	3
+	
+	Kent State
+	14
+	
+	Dayton
+	7
+	
+	Wichita State
+	10
+	
+	Kentucky
+	2
+	
+	Northern Kentucky
+	15
+	
+	
+	
+
