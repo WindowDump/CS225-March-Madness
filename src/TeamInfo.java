@@ -6,6 +6,7 @@ import java.io.FileReader;
 /**
  * Created by Artem on 5/2/2017.
  */
+//Rodrigo, Hillary 5/3
 public class TeamInfo {
 
     HashMap<String, Team> teams;
