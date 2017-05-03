@@ -1,23 +1,27 @@
-//package marchmadness;
+package marchmadness;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.text.Text;
-import javafx.scene.web.HTMLEditor;
+import javafx.scene.control.Button;
+import javafx.scene.control.ToolBar;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 /**
  *  MarchMadnessGUI
+ * 
+ * this class contains the buttons the user interacts
+ * with and controls the actions of other objects 
  *
  * @author Grant Osborn
  */
 public class MarchMadnessGUI extends Application {
-
+    
     private BorderPane root;
     private ToolBar toolBar;
     private ToolBar btoolBar;
@@ -29,24 +33,23 @@ public class MarchMadnessGUI extends Application {
     private Button clearButton;
     private Button resetButton;
     private Button finalizeButton;
-
+    
+    //press scoreBoard button to display scoreBoard
+    private ScoreBoardPane scoreBoard;
+    
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) {  
         root = new BorderPane();
-
-
+        scoreBoard= new ScoreBoardPane();
         CreateToolBars();
-
-        //uncomment the next line of code to test with a html Editor in center
-        //replace HTMLEditor with your class to test your class
-        displayPane(new HTMLEditor());
-
+        
+        //test you frontend object with displayPane()
+        //displayPane(loginPane);
+        
         setActions();
-        root.setTop(toolBar);
+        root.setTop(toolBar);   
         root.setBottom(btoolBar);
-        createLogin();
-
-        Scene scene = new Scene(root, 600, 480);
+        Scene scene = new Scene(root, 800, 600);
         //scene.getStylesheets().add("style.css");
         primaryStage.setTitle("March Madness Bracket Simulator");
         primaryStage.setScene(scene);
@@ -59,20 +62,81 @@ public class MarchMadnessGUI extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    
 
     /**
+     * lets user create a bracket then adds it to the bracket list
+     * 
+     */
+    private void addPlayer(){
+        
+        
+    }
+    /**
+     * simulates the tournament  
+     * 
+     */
+    private void simulate(){
+        
+        
+    }
+    
+    /**
+     * Displays the login screen
+     * 
+     */
+    private void login(){
+           
+    }
+    
+     /**
+     * Displays the score board
+     * 
+     */
+    private void scoreBoard(){
+          displayPane(scoreBoard._start());
+    }
+    
+    /**
+     * displays the users bracket
+     * 
+     */
+    private void viewBracket(){
+        
+        
+    }
+    
+    private void clear(){
+        
+        
+    }
+    
+    
+    private void reset(){
+        
+    }
+    
+    private void finalizeBracket(){
+        
+       
+    }
+    
+    
+    /**
      * displays element in the center of the screen
-     *
-     * @param p must use a subclass of Pane for layout.
+     * 
+     * @param p must use a subclass of Pane for layout. 
      * to be properly center aligned in  the parent node
      */
     private void displayPane(Node p){
         root.setCenter(p);
         BorderPane.setAlignment(p,Pos.CENTER);
     }
-
-    //creates toolBar and buttons.
-    // adds buttons to the toolbar and saves global referances to them
+    
+    /**
+     * creates toolBar and buttons.
+     * adds buttons to the toolbar and saves global references to them
+     */
     private void CreateToolBars(){
         toolBar  = new ToolBar();
         btoolBar  = new ToolBar();
@@ -101,16 +165,21 @@ public class MarchMadnessGUI extends Application {
                 createSpacer()
         );
     }
-
-    //dummy button handeling
+    
+   /**
+    * sets the actions for each button
+    */
     private void setActions(){
-        login.setOnAction(e->btoolBar.setVisible(false));
-        viewBracket.setOnAction(e->btoolBar.setVisible(true));
-        //addPlayer.setOnAction(e->simulate.setVisible(false));
-        addPlayer.setOnAction(e->simulate.setDisable(true));
+        login.setOnAction(e->login());
+        scoreBoardButton.setOnAction(e->scoreBoard());
+        viewBracket.setOnAction(e->viewBracket());
+        addPlayer.setOnAction(e->addPlayer());
+      
     }
-
-    //Creates a spacer for centering buttons in a ToolBar
+    
+    /**
+     * Creates a spacer for centering buttons in a ToolBar
+     */
     private Pane createSpacer(){
         Pane spacer = new Pane();
         HBox.setHgrow(
@@ -119,42 +188,8 @@ public class MarchMadnessGUI extends Application {
         );
         return spacer;
     }
-
-
-    // create the Login pane at the center
-
-    /**
-     * create the login at center
-     * Sergio and Joao
-     */
-    public void createLogin() {
-
-        GridPane gridPane = new GridPane();
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(5, 5, 5, 5));
-
-        Text welcomeMessage = new Text("March Madness Login Welcome");
-        gridPane.add(welcomeMessage, 0, 0, 2, 1);
-
-        Label userName = new Label("User Name: ");
-        gridPane.add(userName, 0, 1);
-
-        TextField enterUser = new TextField();
-        gridPane.add(enterUser, 1, 1);
-
-        Label password = new Label("Password: ");
-        gridPane.add(password, 0, 2);
-
-        PasswordField passwordField = new PasswordField();
-        gridPane.add(passwordField, 1, 2);
-        final Label message = new Label("");
-
-        Button signButton = new Button("Sign in");
-        gridPane.add(signButton, 1, 4);
-
-        root.setCenter(gridPane);
-    }
-
+    
+    
+    
+     
 }
