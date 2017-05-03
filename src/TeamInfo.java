@@ -3,11 +3,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 /**
  * Created by Artem on 5/2/2017.
  */
-public class TeamInfo{
 
     HashMap<String, Team> teams;
 
@@ -16,7 +17,7 @@ public class TeamInfo{
         loadFromFile();
     }
 
-    /**
+   /** Hillary and Rodrigo 5/3
      * This private method will load all the team information from the teamInfo.txt file via a BufferedReader and load each team into
      * the teams HashMap using their name as the key and the actual Team object as the data.
      * -- au: Artem, Rodrigo
@@ -43,6 +44,7 @@ public class TeamInfo{
     	catch(IOException ioe){
     		System.out.println("File Not Found");
     	}
+
     }
 
     /**
