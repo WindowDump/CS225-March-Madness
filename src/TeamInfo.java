@@ -9,7 +9,7 @@ import java.io.FileReader;
 /**
  * Created by Artem on 5/2/2017.
  */
-
+public class TeamInfo{
     HashMap<String, Team> teams;
 
     public TeamInfo() throws IOException{
@@ -17,7 +17,7 @@ import java.io.FileReader;
         loadFromFile();
     }
 
-   /** 
+    /**
      * This private method will load all the team information from the teamInfo.txt file via a BufferedReader and load each team into
      * the teams HashMap using their name as the key and the actual Team object as the data.
      * -- au: Artem, Rodrigo
@@ -65,13 +65,37 @@ import java.io.FileReader;
     }
 
     /**
+     * updated by dan and matt 5/3 using artem's method of score generation
+     *
      * This will be the method that actually does the work of determining the outcome of the games.
      * It will use the seed/ranking from each team on the bracket and put it into an algorithm to somewhat randomly generate a winner
      * -- au: Artem
-     * @param startingBracket -- the bracket to be simulated upon. The master bracket.
-     * @return the bracket after it has been populated with the results of the game.
-     * @throws Exception 
+     * @param startingBracket -- the bracket to be simulated upon. The master bracket
      */
-    public Bracket simulate(Bracket startingBracket){
+    public void simulate(Bracket startingBracket){
+        for (int i = 63; i >= 0; i--) {
+            int index1 = 2*i+1;
+            int index2 = 2*i+2;
+
+            Team team1 = teams.get(startingBracket.getBracket().get(index1));
+            Team team2 = teams.get(startingBracket.getBracket().get(index2));
+
+            int score1 = 0;
+            int score2 = 0;
+            while(score1==score2) {
+                score1 = (int) (((Math.random() * 136) + 75) * (1 - (team1.getRanking() * 0.02)));
+                score2 = (int) (((Math.random() * 136) + 75) * (1 - (team2.getRanking() * 0.02)));
+            }
+
+            startingBracket.setTeamScore(index1, score1);
+            startingBracket.setTeamScore(index2, score2);
+
+            if(score1>score2)
+                startingBracket.moveTeamUp(index1);
+            else
+                startingBracket.moveTeamUp(index2);
+        }
+
     }
 }
+
