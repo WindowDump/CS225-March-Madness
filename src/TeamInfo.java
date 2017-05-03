@@ -17,7 +17,7 @@ import java.io.FileReader;
         loadFromFile();
     }
 
-   /** Hillary and Rodrigo 5/3
+   /** 
      * This private method will load all the team information from the teamInfo.txt file via a BufferedReader and load each team into
      * the teams HashMap using their name as the key and the actual Team object as the data.
      * -- au: Artem, Rodrigo
