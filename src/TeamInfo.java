@@ -1,14 +1,17 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Artem on 5/2/2017.
  */
-public class TeamInfo {
+public class TeamInfo{
 
     HashMap<String, Team> teams;
 
-    public TeamInfo(){
+    public TeamInfo() throws IOException{
         teams = new HashMap<>();
         loadFromFile();
     }
@@ -16,9 +19,30 @@ public class TeamInfo {
     /**
      * This private method will load all the team information from the teamInfo.txt file via a BufferedReader and load each team into
      * the teams HashMap using their name as the key and the actual Team object as the data.
-     * -- au: Artem
+     * -- au: Artem, Rodrigo
      */
-    private void loadFromFile() {
+    private void loadFromFile(){
+    	
+    	String name;
+    	String info;
+    	int ranking;
+    	
+    	try{
+    		BufferedReader br = new BufferedReader(new FileReader("teaminfo.txt"));
+
+    		while((name = br.readLine()) != null){
+    			info = br.readLine();
+    			ranking = Integer.parseInt(br.readLine());
+    			Team newTeam = new Team(name, info, ranking); //creates team with info
+                
+    			br.readLine();   //gets rid of empty line between team infos
+    			
+    			teams.put(newTeam.getName(), newTeam);   //map team name with respective team object
+    		}
+    	}
+    	catch(IOException ioe){
+    		System.out.println("File Not Found");
+    	}
     }
 
     /**
@@ -44,11 +68,8 @@ public class TeamInfo {
      * -- au: Artem
      * @param startingBracket -- the bracket to be simulated upon. The master bracket.
      * @return the bracket after it has been populated with the results of the game.
+     * @throws Exception 
      */
     public Bracket simulate(Bracket startingBracket){
     }
-
-
-
-
 }
