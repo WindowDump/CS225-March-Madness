@@ -29,7 +29,7 @@ public class TeamInfo{
      int ranking;
      
      try{
-      BufferedReader br = new BufferedReader(new FileReader("teaminfo.txt"));
+      BufferedReader br = new BufferedReader(new FileReader("teamInfo.txt"));
 
       while((name = br.readLine()) != null){
        info = br.readLine();
