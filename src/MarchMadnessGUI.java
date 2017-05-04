@@ -8,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.web.HTMLEditor;
@@ -37,6 +38,8 @@ public class MarchMadnessGUI extends Application {
     private Button resetButton;
     private Button finalizeButton;
     private Bracket emptyBracket;
+    private GridPane loginPane;
+    private BracketPane bracketPane;
 
     //private BracketPane bracketPane;
     private ArrayList<Bracket> playerBrackets;
@@ -45,7 +48,9 @@ public class MarchMadnessGUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         root = new BorderPane();
+        bracketPane = new BracketPane();
         playerBrackets = new ArrayList<>();
+
 
         // ??
         emptyBracket = new Bracket(new ArrayList<String>());
@@ -70,7 +75,7 @@ public class MarchMadnessGUI extends Application {
         Sergio and Joao
          */
 
-        GridPane loginPane = new GridPane();
+        loginPane = new GridPane();
         loginPane.setAlignment(Pos.CENTER);
         loginPane.setHgap(10);
         loginPane.setVgap(10);
@@ -212,7 +217,13 @@ public class MarchMadnessGUI extends Application {
     //dummy button handeling
     private void setActions() {
         login.setOnAction(e -> btoolBar.setVisible(false));
+        login.setOnMouseClicked(e -> {
+            root.setCenter(loginPane);
+        });
         viewBracket.setOnAction(e -> btoolBar.setVisible(true));
+        viewBracket.setOnMouseClicked(mouseEvent -> {
+            root.setCenter(bracketPane);
+        });
         //addPlayer.setOnAction(e->simulate.setVisible(false));
         addPlayer.setOnAction(e -> simulate.setDisable(true));
     }
