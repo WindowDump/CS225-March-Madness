@@ -128,7 +128,7 @@ public class MarchMadnessGUI extends Application {
                 playerBrackets.add(tmpPlayerBracket);
                 tmpPlayerBracket.setPassword(playerPass);
 
-                playerMap.put(name, emptyBracket);
+                playerMap.put(name, tmpPlayerBracket);
             }
 
             //            for ( Bracket bracket : playerBrackets) {
