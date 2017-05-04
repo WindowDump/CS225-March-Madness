@@ -10,6 +10,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
 {
     //Attributes
     private ArrayList<String> bracket;
+    private int[] teamScores = new int[127];
     private String playerName;
     private String password;
     static final int EAST_BRACKET = 3;
@@ -213,6 +214,15 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
      */
     public void setPlayerName(String user){
         playerName = user;
+    }
+    /**
+     * added by dan and matt 5/3
+     * Set teamScore for a game
+     * @param game, index of the place that will be scored
+     * @param score, the amount of points that the team scores
+     */
+    public void setTeamScore(int game, int score){
+        teamScores[game] = score;
     }
 }
 
