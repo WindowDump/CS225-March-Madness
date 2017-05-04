@@ -39,14 +39,14 @@ public class MarchMadnessGUI extends Application {
 
         //uncomment the next line of code to test with a html Editor in center
         //replace HTMLEditor with your class to test your class
-        displayPane(new BracketPane());
+        displayPane(new HTMLEditor());
 
         setActions();
         root.setTop(toolBar);
         root.setBottom(btoolBar);
-//        createLogin();
+        createLogin();
 
-        Scene scene = new Scene(root, 1000, 700);
+        Scene scene = new Scene(root, 600, 480);
         //scene.getStylesheets().add("style.css");
         primaryStage.setTitle("March Madness Bracket Simulator");
         primaryStage.setScene(scene);
