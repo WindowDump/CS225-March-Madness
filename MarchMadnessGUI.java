@@ -1,23 +1,36 @@
-//package marchmadness;
+package marchmadness;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
-import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 
 /**
  *  MarchMadnessGUI
+ * 
+ * this class contains the buttons the user interacts
+ * with and controls the actions of other objects 
  *
  * @author Grant Osborn
  */
 public class MarchMadnessGUI extends Application {
-
+    
     private BorderPane root;
     private ToolBar toolBar;
     private ToolBar btoolBar;
@@ -29,24 +42,42 @@ public class MarchMadnessGUI extends Application {
     private Button clearButton;
     private Button resetButton;
     private Button finalizeButton;
+    
+    private Bracket emptyBracket;
 
+    
+    private ArrayList<Bracket> playerBrackets;
+    private HashMap<String, Bracket> playerMap;
+
+    
+    //press scoreBoard button to display scoreBoard
+    private ScoreboardPane scoreBoard;
+    private BracketPane bracketPane;
+    
+    
     @Override
     public void start(Stage primaryStage) {
+           playerBrackets = new ArrayList<>();
+
+        // ??
+        emptyBracket = new Bracket(new ArrayList<String>());
+
+
+        playerMap = new HashMap<>();
+
+        
         root = new BorderPane();
-
-
+        scoreBoard= new ScoreboardPane();
+        bracketPane= new BracketPane();
         CreateToolBars();
-
-        //uncomment the next line of code to test with a html Editor in center
-        //replace HTMLEditor with your class to test your class
-        displayPane(new HTMLEditor());
-
+        
+        //test you frontend object with displayPane()
+        displayPane(bracketPane);
+        
         setActions();
-        root.setTop(toolBar);
+        root.setTop(toolBar);   
         root.setBottom(btoolBar);
-        createLogin();
-
-        Scene scene = new Scene(root, 600, 480);
+        Scene scene = new Scene(root, 800, 600);
         //scene.getStylesheets().add("style.css");
         primaryStage.setTitle("March Madness Bracket Simulator");
         primaryStage.setScene(scene);
@@ -59,20 +90,80 @@ public class MarchMadnessGUI extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    
 
     /**
+     * lets user create a bracket then adds it to the bracket list
+     * 
+     */
+    private void addPlayer(){
+            
+    }
+    /**
+     * simulates the tournament  
+     * 
+     */
+    private void simulate(){
+        
+        
+    }
+    
+    /**
+     * Displays the login screen
+     * 
+     */
+    private void login(){
+           displayPane(createLogin());
+    }
+    
+     /**
+     * Displays the score board
+     * 
+     */
+    private void scoreBoard(){
+          displayPane(scoreBoard._start());
+    }
+    
+    /**
+     * displays the users bracket
+     * 
+     */
+    private void viewBracket(){
+        displayPane(bracketPane);
+        
+    }
+    
+    private void clear(){
+        
+        
+    }
+    
+    
+    private void reset(){
+        
+    }
+    
+    private void finalizeBracket(){
+        
+        
+    }
+    
+    
+    /**
      * displays element in the center of the screen
-     *
-     * @param p must use a subclass of Pane for layout.
+     * 
+     * @param p must use a subclass of Pane for layout. 
      * to be properly center aligned in  the parent node
      */
     private void displayPane(Node p){
         root.setCenter(p);
         BorderPane.setAlignment(p,Pos.CENTER);
     }
-
-    //creates toolBar and buttons.
-    // adds buttons to the toolbar and saves global referances to them
+    
+    /**
+     * creates toolBar and buttons.
+     * adds buttons to the toolbar and saves global references to them
+     */
     private void CreateToolBars(){
         toolBar  = new ToolBar();
         btoolBar  = new ToolBar();
@@ -101,16 +192,21 @@ public class MarchMadnessGUI extends Application {
                 createSpacer()
         );
     }
-
-    //dummy button handeling
+    
+   /**
+    * sets the actions for each button
+    */
     private void setActions(){
-        login.setOnAction(e->btoolBar.setVisible(false));
-        viewBracket.setOnAction(e->btoolBar.setVisible(true));
-        //addPlayer.setOnAction(e->simulate.setVisible(false));
-        addPlayer.setOnAction(e->simulate.setDisable(true));
+        login.setOnAction(e->login());
+        scoreBoardButton.setOnAction(e->scoreBoard());
+        viewBracket.setOnAction(e->viewBracket());
+        addPlayer.setOnAction(e->addPlayer());
+      
     }
-
-    //Creates a spacer for centering buttons in a ToolBar
+    
+    /**
+     * Creates a spacer for centering buttons in a ToolBar
+     */
     private Pane createSpacer(){
         Pane spacer = new Pane();
         HBox.setHgrow(
@@ -119,42 +215,104 @@ public class MarchMadnessGUI extends Application {
         );
         return spacer;
     }
+    
+    
+    private GridPane createLogin(){
+        
+        
+        /*
+        LoginPane
+        Sergio and Joao
+         */
 
-
-    // create the Login pane at the center
-
-    /**
-     * create the login at center
-     * Sergio and Joao
-     */
-    public void createLogin() {
-
-        GridPane gridPane = new GridPane();
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(5, 5, 5, 5));
+        GridPane loginPane = new GridPane();
+        loginPane.setAlignment(Pos.CENTER);
+        loginPane.setHgap(10);
+        loginPane.setVgap(10);
+        loginPane.setPadding(new Insets(5, 5, 5, 5));
 
         Text welcomeMessage = new Text("March Madness Login Welcome");
-        gridPane.add(welcomeMessage, 0, 0, 2, 1);
+        loginPane.add(welcomeMessage, 0, 0, 2, 1);
 
         Label userName = new Label("User Name: ");
-        gridPane.add(userName, 0, 1);
+        loginPane.add(userName, 0, 1);
 
         TextField enterUser = new TextField();
-        gridPane.add(enterUser, 1, 1);
+        loginPane.add(enterUser, 1, 1);
 
         Label password = new Label("Password: ");
-        gridPane.add(password, 0, 2);
+        loginPane.add(password, 0, 2);
 
         PasswordField passwordField = new PasswordField();
-        gridPane.add(passwordField, 1, 2);
-        final Label message = new Label("");
+        loginPane.add(passwordField, 1, 2);
 
         Button signButton = new Button("Sign in");
-        gridPane.add(signButton, 1, 4);
+        loginPane.add(signButton, 1, 4);
 
-        root.setCenter(gridPane);
+        Label message = new Label();
+        loginPane.add(message, 1, 5);
+
+        signButton.setOnAction(event -> {
+
+            // the name user enter
+            String name = enterUser.getText();
+            // the password user enter
+            String playerPass = passwordField.getText();
+
+            System.out.println(name + " " + playerPass);
+              System.out.println(playerMap.get(name));
+            if (playerMap.get(name) != null) {
+                //check password of user
+                 
+                Bracket tmpBracket = this.playerMap.get(name);
+                System.out.println(playerMap.get(name).getPassword());
+
+                String password1 = tmpBracket.getPassword();
+                System.out.println(password1 + " " + playerPass);
+
+                if (Objects.equals(password1, playerPass)) {
+                    // load bracket
+                    // bracketPane.setCurrent(playerMap.get(name));
+                    System.out.println("load bracket of user: " + name);
+                } else {
+                    System.out.println("Password incorrect!");
+                }
+
+            } else {
+                //create new bracket
+                System.out.println("User " + name + " did not exist, created new bracket");
+                Bracket tmpPlayerBracket = new Bracket(emptyBracket, name);
+                playerBrackets.add(tmpPlayerBracket);
+                tmpPlayerBracket.setPassword(playerPass);
+
+                playerMap.put(name, tmpPlayerBracket);
+            }
+
+            //            for ( Bracket bracket : playerBrackets) {
+//
+//
+//                if(name.equals(bracket.getPlayerName())
+//                        || playerPass.equals(bracket.getPassword())
+//
+//                        load the bracket object
+//
+//                        );
+//                else {
+//
+//                     create a new Bracket
+//                     new Bracket();
+//
+            //Bracket playerBracket = new Bracket();
+            //playerBracket.setPassword();
+//                }
+//            }
+
+        });
+        
+        return loginPane;
     }
-
+    
+    
+    
+     
 }
