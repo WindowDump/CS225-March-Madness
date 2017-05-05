@@ -24,21 +24,21 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
      * -- au: Artem, Rodrigo
      */
     private void loadFromFile(){
-     
+
         String name;
         String info;
         int ranking;
-     
+
         try{
-            BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Matthew\\IdeaProjects\\MarchMadness\\src\\teamInfo.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("teamInfo.txt"));
 
             while((name = br.readLine()) != null){
                 info = br.readLine();
                 ranking = Integer.parseInt(br.readLine());
                 Team newTeam = new Team(name, info, ranking); //creates team with info
-                
+
                 br.readLine();   //gets rid of empty line between team infos
-       
+
                 teams.put(newTeam.getName(), newTeam);   //map team name with respective team object
             }
             br.close();
@@ -73,7 +73,7 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
         /* The equation for score that I settled on is this:
          * (Random int 75-135) * (1 - 0.02 * seed ranking)
          * This way, the multiplier would be between 0.68 and 0.98. Multiply that by 75-135, and you get a reasonable score with room for chance to prevail for lower teams. */
-          
+
             int index1 = 2*i+1;
             int index2 = 2*i+2;
 
@@ -103,12 +103,12 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
      * reads Strings from initialMatches.txt into an ArrayList in order to construct the starting bracket
      * @return ArrayList of Strings
      */
-    public ArrayList<String> loadStartingBracket(){
+    public static ArrayList<String> loadStartingBracket(){
         String name;
         ArrayList<String> starting = new ArrayList<String>();
 
         try{
-            BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Matthew\\IdeaProjects\\MarchMadness\\src\\initialMatches.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("initialMatches.txt"));
 
             while((name = br.readLine()) != null){
                 starting.add(name);
