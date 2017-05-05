@@ -103,7 +103,7 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
      * reads Strings from initialMatches.txt into an ArrayList in order to construct the starting bracket
      * @return ArrayList of Strings
      */
-    public ArrayList<String> loadStartingBracket(){
+    public static ArrayList<String> loadStartingBracket(){
         String name;
         ArrayList<String> starting = new ArrayList<String>();
 
