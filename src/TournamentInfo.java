@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.io.BufferedReader;
@@ -9,10 +10,10 @@ import java.io.FileReader;
 /**
  * Created by Artem on 5/2/2017.
  */
-public class TeamInfo{
+public class TournamentInfo{//renamed from teamInfo by matt 5/4
     HashMap<String, Team> teams;
 
-    public TeamInfo() throws IOException{
+    public TournamentInfo() throws IOException{
         teams = new HashMap<>();
         loadFromFile();
     }
@@ -24,27 +25,27 @@ public class TeamInfo{
      */
     private void loadFromFile(){
      
-     String name;
-     String info;
-     int ranking;
+        String name;
+        String info;
+        int ranking;
      
-     try{
-      BufferedReader br = new BufferedReader(new FileReader("teamInfo.txt"));
+        try{
+            BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Matthew\\IdeaProjects\\MarchMadness\\src\\teamInfo.txt"));
 
-      while((name = br.readLine()) != null){
-       info = br.readLine();
-       ranking = Integer.parseInt(br.readLine());
-       Team newTeam = new Team(name, info, ranking); //creates team with info
+            while((name = br.readLine()) != null){
+                info = br.readLine();
+                ranking = Integer.parseInt(br.readLine());
+                Team newTeam = new Team(name, info, ranking); //creates team with info
                 
-       br.readLine();   //gets rid of empty line between team infos
+                br.readLine();   //gets rid of empty line between team infos
        
-       teams.put(newTeam.getName(), newTeam);   //map team name with respective team object
-      }
-     }
-     catch(IOException ioe){
-      System.out.println("File Not Found");
-     }
-
+                teams.put(newTeam.getName(), newTeam);   //map team name with respective team object
+            }
+            br.close();
+        }
+        catch(IOException ioe){
+            System.out.println("File Not Found");
+        }
     }
 
     /**
@@ -68,7 +69,7 @@ public class TeamInfo{
      * @param startingBracket -- the bracket to be simulated upon. The master bracket
      */
     public void simulate(Bracket startingBracket){
-        for (int i = 62; i > 0; i--) {
+        for (int i = 62; i >= 0; i--) {
         /* The equation for score that I settled on is this:
          * (Random int 75-135) * (1 - 0.02 * seed ranking)
          * This way, the multiplier would be between 0.68 and 0.98. Multiply that by 75-135, and you get a reasonable score with room for chance to prevail for lower teams. */
@@ -94,6 +95,31 @@ public class TeamInfo{
             else
                 startingBracket.moveTeamUp(index2);
         }
+
+    }
+
+    /**
+     * added by Matt 5/4
+     * reads Strings from initialMatches.txt into an ArrayList in order to construct the starting bracket
+     * @return ArrayList of Strings
+     */
+    public ArrayList<String> loadStartingBracket(){
+        String name;
+        ArrayList<String> starting = new ArrayList<String>();
+
+        try{
+            BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Matthew\\IdeaProjects\\MarchMadness\\src\\initialMatches.txt"));
+
+            while((name = br.readLine()) != null){
+                starting.add(name);
+            }
+
+            br.close();
+        }
+        catch(IOException ioe){
+            System.out.println("File Not Found");
+        }
+        return starting;
 
     }
 }
