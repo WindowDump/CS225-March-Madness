@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -27,95 +28,57 @@ public class BracketPane extends BorderPane {
      * TODO:
      */
     private static ArrayList<BracketNode> nodes;
-
-    /**
-     *  Maps the text "buttons" to it's respective grid-pane
-     */
-    private HashMap<Text, GridPane> panes;
-
-    /**
-     * Reference to the current bracket.
-     */
-    private Bracket currentBracket;
-
-    /**
-     * Reference to active subtree within current bracket.
-     */
-    private int displayedSubtree;
-
     /**
      * Used to initiate the paint of the bracket nodes
      */
     private static boolean isTop = true;
-
-
+    /**
+     *  Maps the text "buttons" to it's respective grid-pane
+     */
+//    private HashMap<Text, GridPane> panes;
+    private HashMap<StackPane, GridPane> panes;
+    /**
+     * Reference to the current bracket.
+     */
+    private Bracket currentBracket;
+    /**
+     * Reference to active subtree within current bracket.
+     */
+    private int displayedSubtree;
     /**
      * Keeps track of whether or not bracket has been finalized.
      */
     private boolean finalized;
+    /**
+     * Handles clicked events for BracketNode objects
+     */
+    private EventHandler<MouseEvent> clicked = mouseEvent -> {
+        // TODO: update bracket
+        System.out.println("HEY");
+    };
+    /**
+     * Handles mouseEntered events for BracketNode objects
+     */
+    private EventHandler<MouseEvent> enter = mouseEvent -> {
+        BracketNode tmp = (BracketNode) mouseEvent.getSource();
+        tmp.setStyle("-fx-background-color: lightcyan;");
+        tmp.setEffect(new InnerShadow(10, Color.LIGHTCYAN));
+    };
+    /**
+     * Handles mouseExited events for BracketNode objects
+     */
+    private EventHandler<MouseEvent> exit = mouseEvent -> {
+        BracketNode tmp = (BracketNode) mouseEvent.getSource();
+        tmp.setStyle(null);
+        tmp.setEffect(null);
+
+    };
 
     /**
      * @param currentBracket  TODO: change other constructor to take in this param
      */
     public BracketPane(Bracket currentBracket) {
         this.currentBracket = currentBracket;
-    }
-
-    /**
-     * TODO
-     * @param start the numeric indicator of which subtree
-     */
-    public void drawSubtree(int start) {
-        // TODO: clear window and draw new stuff.
-    }
-
-    /**
-     * Sets the current bracket to,
-     * @param target The bracket to replace currentBracket
-     */
-    public void setBracket(Bracket target) {
-        currentBracket = target;
-    }
-
-    /**
-     * Clears the sub tree from,
-     * @param position The position to clear after
-     */
-    public void clearSubtree(int position) {
-        currentBracket.resetSubtree(position);
-    }
-
-    /**
-     * TODO
-     * Resets the bracket-display
-     */
-    public void resetBracket() {
-        currentBracket.resetSubtree(0);
-    }
-
-    /**
-     * @param isFinalized The value to set finalized to.
-     */
-    public void setFinalized(boolean isFinalized) {
-        finalized = isFinalized && currentBracket.isComplete();
-    }
-
-    /**
-     * Requests a message from current bracket to tell if the bracket
-     * has been completed.
-     * @return True if completed, false otherwise.
-     */
-    public boolean isComplete() {
-        return currentBracket.isComplete();
-    }
-
-    /**
-     * Returns
-     * @return true if the current-bracket is complete and the value
-     * of finalized is also true.
-     */
-    public boolean isFinalized() {
-        return currentBracket.isComplete() && finalized;
     }
 
     /**
@@ -127,12 +90,18 @@ public class BracketPane extends BorderPane {
         nodes = new ArrayList<>();
 
         // Creates "buttons" of Text objects.
-        ArrayList<Text> buttons = new ArrayList<>();
-        buttons.add(new Text("North"));
-        buttons.add(new Text("South"));
-        buttons.add(new Text("East"));
-        buttons.add(new Text("West"));
-        buttons.add(new Text("Full"));
+//        ArrayList<Text> buttons = new ArrayList<>();
+//        buttons.add(new Text("North"));
+//        buttons.add(new Text("South"));
+//        buttons.add(new Text("East"));
+//        buttons.add(new Text("West"));
+//        buttons.add(new Text("Full"));
+        ArrayList<StackPane> buttons = new ArrayList<>();
+        buttons.add(customButton("EAST", Color.CORAL));
+        buttons.add(customButton("WEST", Color.CORAL));
+        buttons.add(customButton("MIDWEST", Color.CORAL));
+        buttons.add(customButton("SOUTH", Color.CORAL));
+        buttons.add(customButton("FULL", Color.CORAL));
 
         // initializes each graphical representation of sub-trees
         // adds each to the panes map
@@ -170,30 +139,105 @@ public class BracketPane extends BorderPane {
         this.setCenter(buttonGrid);
 
         // Adds functionality to each text object
-        for (Text t : buttons) {
-            t.setTextAlignment(TextAlignment.CENTER);
-            t.setStyle("-fx-background-color: orange;");
+//        for (Text t : buttons) {
+        for (StackPane t : buttons) {
+//            t.setTextAlignment(TextAlignment.CENTER);
+
             t.setOnMouseEntered(mouseEvent -> {
-                t.setStyle("-fx-background-color: darkgray;");
+                t.setStyle("-fx-background-color: lightblue;");
                 t.setEffect(new InnerShadow(10, Color.LIGHTCYAN));
             });
             t.setOnMouseExited(mouseEvent -> {
-                t.setStyle(null);
+                t.setStyle("-fx-background-color: orange;");
+//                t.setStyle();
                 t.setEffect(null);
             });
             t.setOnMouseClicked(mouseEvent -> {
                // Changes center on mouse clicked
                 // TODO Disable appropriate text objects from being click-able
                 setCenter(null);
-                if (panes.get(t) != fullPane) {
-                    panes.get(t).setScaleX(1.5);
-                    panes.get(t).setScaleY(1.5);
-                }
+//                if (panes.get(t) != fullPane) {
+//                    panes.get(t).setScaleX(1.5);
+//                    panes.get(t).setScaleY(1.5);
+//                }
                 setCenter(panes.get(t));
             });
             if (this.getCenter() != null) this.getCenter().requestFocus();
         }
 
+    }
+
+    /**
+     * TODO
+     * @param start the numeric indicator of which subtree
+     */
+    public void drawSubtree(int start) {
+        // TODO: clear window and draw new stuff.
+    }
+
+    /**
+     * Sets the current bracket to,
+     * @param target The bracket to replace currentBracket
+     */
+    public void setBracket(Bracket target) {
+        currentBracket = target;
+    }
+
+    /**
+     * Clears the sub tree from,
+     * @param position The position to clear after
+     */
+    public void clearSubtree(int position) {
+        currentBracket.resetSubtree(position);
+    }
+
+    /**
+     * TODO
+     * Resets the bracket-display
+     */
+    public void resetBracket() {
+        currentBracket.resetSubtree(0);
+    }
+
+    /**
+     * Requests a message from current bracket to tell if the bracket
+     * has been completed.
+     * @return True if completed, false otherwise.
+     */
+    public boolean isComplete() {
+        return currentBracket.isComplete();
+    }
+
+    /**
+     * Returns
+     * @return true if the current-bracket is complete and the value
+     * of finalized is also true.
+     */
+    public boolean isFinalized() {
+        return currentBracket.isComplete() && finalized;
+    }
+
+    /**
+     * @param isFinalized The value to set finalized to.
+     */
+    public void setFinalized(boolean isFinalized) {
+        finalized = isFinalized && currentBracket.isComplete();
+    }
+
+    /**
+     * Returns a custom "Button" with specified
+     * @param name The name of the button
+     * @param color
+     * @return pane The stack-pane "button"
+     */
+    private StackPane customButton(String name, Color color) {
+        StackPane pane = new StackPane();
+        Rectangle r = new Rectangle(100,50, Color.TRANSPARENT);
+        Text t = new Text(name);
+        t.setTextAlignment(TextAlignment.CENTER);
+        pane.getChildren().addAll(r, t);
+        pane.setStyle("-fx-background-color: orange;");
+        return pane;
     }
 
     /**
@@ -251,33 +295,6 @@ public class BracketPane extends BorderPane {
     }
 
     /**
-     * Handles clicked events for BracketNode objects
-     */
-    private EventHandler<MouseEvent> clicked = mouseEvent -> {
-        // TODO: update bracket
-        System.out.println("HEY");
-    };
-
-    /**
-     * Handles mouseEntered events for BracketNode objects
-     */
-    private EventHandler<MouseEvent> enter = mouseEvent -> {
-        BracketNode tmp = (BracketNode) mouseEvent.getSource();
-        tmp.setStyle("-fx-background-color: lightcyan;");
-        tmp.setEffect(new InnerShadow(10, Color.LIGHTCYAN));
-    };
-
-    /**
-     * Handles mouseExited events for BracketNode objects
-     */
-    private EventHandler<MouseEvent> exit = mouseEvent -> {
-        BracketNode tmp = (BracketNode) mouseEvent.getSource();
-        tmp.setStyle(null);
-        tmp.setEffect(null);
-
-    };
-
-    /**
      * The BracketNode model for the Graphical display of the "Bracket"
      */
     private class BracketNode extends Pane {
@@ -307,6 +324,13 @@ public class BracketPane extends BorderPane {
         }
 
         /**
+         * @return TODO: Is this necessary?
+         */
+        public String getName() {
+            return teamName;
+        }
+
+        /**
          * @param teamName TODO: Is this necessary?
          */
         public void setName(String teamName) {
@@ -314,15 +338,5 @@ public class BracketPane extends BorderPane {
             name.setText(teamName);
         }
 
-        /**
-         * @return TODO: Or this?
-         */
-        public String getName() {
-            return teamName;
-        }
-
     }
-
-
-
 }

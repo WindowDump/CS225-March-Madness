@@ -1,5 +1,3 @@
-package marchmadness;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,7 +57,7 @@ public class MarchMadnessGUI extends Application {
 
     
   
-    private ScoreboardPane scoreBoard;
+    private ScoreBoardPane scoreBoard;
     private BracketPane bracketPane;
     private GridPane loginP;
     //private TeamInfo teamInfo;
@@ -88,7 +86,7 @@ public class MarchMadnessGUI extends Application {
 
         
         root = new BorderPane();
-        scoreBoard= new ScoreboardPane();
+        scoreBoard= new ScoreBoardPane();
         bracketPane= new BracketPane();
         loginP=createLogin();
         CreateToolBars();
