@@ -1,4 +1,3 @@
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,7 +24,7 @@ import java.util.Map;
  * ScoreBoardPane class is the class the displays the Scoreboard from the Main GUI.
  * It shows all of the Player's names and their scores.
  */
-public class ScoreBoardPane extends Application {
+public class ScoreBoardPane {
 
     /**
      * attributes contributed by Ying Sun
@@ -36,8 +35,8 @@ public class ScoreBoardPane extends Application {
     /**
      * attributes contributed by Sarah Higgins
      */
-    public static final String Column1MapKey = "PlayerName";
-    public static final String Column2MapKey = "Player Score";
+    public static final String Column1MapKey = "  ";
+    public static final int Column2MapKey = 0;
 
     /**
      * ScoreBoardPane constructor
@@ -46,25 +45,7 @@ public class ScoreBoardPane extends Application {
 
     }
 
-    /**
-     * main() method launches the program
-     * @param args takes in all of the javaFX arguments withing
-     *             the start() method
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    /**
-     * creates the GUI
-     * @param stage
-     */
-    @Override
-    public void start(Stage stage) {
-        Scene scene = new Scene(new Group());
-        stage.setTitle("March Madness Bracket");
-        stage.setWidth(310);
-        stage.setHeight(520);
+    public TableView _start() {
 
         final Label label = new Label("March Madness");
         label.setFont(new Font("Arial", 20));
@@ -121,10 +102,7 @@ public class ScoreBoardPane extends Application {
         vbox.setPadding(new Insets(12, 0, 0, 12));
         vbox.getChildren().addAll(label, table_view);
 
-        ((Group) scene.getRoot()).getChildren().addAll(vbox);
-
-        stage.setScene(scene);
-        stage.show();
+        return table_view;
     }
 
 
@@ -138,7 +116,7 @@ public class ScoreBoardPane extends Application {
             String value2 = "score" + i;
 
             scoresRow.put(Column1MapKey, value1);
-            scoresRow.put(Column2MapKey, value2);
+            scoresRow.put(Column1MapKey, value2);
 
             allData.add(scoresRow);
         }
