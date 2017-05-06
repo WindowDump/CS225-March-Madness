@@ -170,19 +170,20 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         return true;
     }
     
-    /* Hillary: checks whether subtree starting at root is complete  INCOMPLETE-MIGHT NEED IMPROVEMENT
-    * update by matt and hillary 5/2, now works*/
+    /* Hillary
+         Method isSubtreeComplete
+         @param int root.
+         @return boolean: returns true or false depending on whether there are any empty strings in the subTree from the given root.
+         If the root itself is empty return false. otherwise the method is recursively applied to the left and right subtrees of the root.
+    update by matt and hillary 5/2 */
     public boolean isSubtreeComplete(int root)
     {
         if(bracket.get(root).equals(""))
             return false;
         int rightChild = 2 * root + 2;
         int leftChild = 2 * root + 1;
-        //else if(rightChild < bracket.size()) return isSubtreeComplete(rightChild);
-        //else if(leftChild < bracket.size()) return isSubtreeComplete(leftChild);
         if(leftChild< bracket.size() && rightChild<bracket.size())
             return isSubtreeComplete(leftChild) && isSubtreeComplete(rightChild);
-
         return true;
     }
 
