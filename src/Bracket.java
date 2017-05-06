@@ -131,7 +131,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     }
 
     /** 
-     * Hillary Ssemakula
+     * Hillary Ssemakula:
      * set player's password to string parameter 
      * @param String password,
      */
@@ -141,7 +141,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     }
 
       /** 
-        * Hillary 
+        * Hillary: 
         * returns the name of the player
         * @return String
         */
@@ -151,7 +151,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     }
     
       /** 
-        * Hillary
+        * Hillary:
         * returns the player's password
         * @return String
         */
@@ -161,7 +161,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     }
     
       /** 
-        * Hillary
+        * Hillary:
         * returns true or false depending on whether there are any empty slots on the bracket.
         * If a position has an empty string then the advancing team has not been chosen for that spot and the whole bracket is not complete.
         * @return boolean.
@@ -175,11 +175,11 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     }
     
     /** 
-      * Hillary
+      * Hillary:
       * returns true or false depending on whether there are any empty slots in te bracket from a given point all the way to the starting 64 teams.
       * If the root itself is empty return false. otherwise the method is recursively applied to the left and right subtrees of the root.
       * @param int root.
-      * @return boolean: 
+      * @return boolean
     *update by matt and hillary 5/2 */
     public boolean isSubtreeComplete(int root)
     {
