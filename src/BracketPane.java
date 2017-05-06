@@ -52,9 +52,62 @@ public class BracketPane extends BorderPane {
     /**
      * Handles clicked events for BracketNode objects
      */
+    private HashMap<Integer, BracketNode> bracketNodeMap;
+    /**
+     * Able to save the working bracket to the main data structure
+     */
+    private HashMap<String, Bracket> playerMap;
+
+    /**
+     * Clears the entries of a team future wins
+     * @param treeNum
+     */
+    private void clearAbove(int treeNum){
+        int nextTreeNum = (treeNum - 1) / 2;
+        if (!bracketNodeMap.get(nextTreeNum).getName().isEmpty()){
+            bracketNodeMap.get(nextTreeNum).setName("");
+            clearAbove(nextTreeNum);
+        }
+    }
+    /**
+     * Handles mouseClicked events for BracketNode objects
+     */
     private EventHandler<MouseEvent> clicked = mouseEvent -> {
-        // TODO: update bracket
-        System.out.println("HEY");
+        BracketNode tmp = (BracketNode) mouseEvent.getSource();
+        int treeNum = tmp.getTreeNum();
+        int nextTreeNum = (treeNum - 1) / 2;
+        //The starting ends of the bracket (63 - 126) will cause a team to move up.
+        if (treeNum >= 63) {
+            //If the next node contains text, the team will be moved down and new team moved up
+            if (!bracketNodeMap.get(nextTreeNum).getName().isEmpty()) {
+                currentBracket.removeAbove((nextTreeNum));
+                clearAbove(treeNum);
+                bracketNodeMap.get(nextTreeNum).setName(tmp.getName());
+                currentBracket.moveTeamUp(treeNum);
+                saveBracket(currentBracket);
+            }
+            else{
+                bracketNodeMap.get(nextTreeNum).setName(tmp.getName());
+                currentBracket.moveTeamUp(treeNum);
+                saveBracket(currentBracket);
+            }
+        }
+        //treeNum < 63
+        else {
+            //check to see if the next node contains a team, if it does move team down and clear all the team progress from above the node
+            if(!bracketNodeMap.get(nextTreeNum).getName().isEmpty()) {
+                currentBracket.removeAbove(nextTreeNum);
+                clearAbove(treeNum);
+                bracketNodeMap.get(nextTreeNum).setName(tmp.getName());
+                currentBracket.moveTeamUp(treeNum);
+                saveBracket(currentBracket);
+            }
+            else {
+                bracketNodeMap.get(nextTreeNum).setName(tmp.getName());
+                currentBracket.moveTeamUp(treeNum);
+                saveBracket(currentBracket);
+            }
+            }
     };
     /**
      * Handles mouseEntered events for BracketNode objects
@@ -74,20 +127,23 @@ public class BracketPane extends BorderPane {
 
     };
 
-    /**
-     * @param currentBracket  TODO: change other constructor to take in this param
-     */
-    public BracketPane(Bracket currentBracket) {
-        this.currentBracket = currentBracket;
-    }
 
     /**
      * TODO: Reduce. reuse, recycle!
      * Initializes the properties needed to construct a bracket.
      */
-    public BracketPane() {
+    public BracketPane(Bracket bracket, HashMap<String, Bracket> playerMap) {
+        this.playerMap = playerMap;
+        this.currentBracket = bracket;
         panes = new HashMap<>();
         nodes = new ArrayList<>();
+
+        ArrayList<String> teams;
+        teams = currentBracket.getBracket();
+        HashMap<Integer, String> teamIndexMap = new HashMap<>();
+        for (int i = 0; i < 127 ; i++) {
+            teamIndexMap.put(i, teams.get(i));
+        }
 
         // Creates "buttons" of Text objects.
 //        ArrayList<Text> buttons = new ArrayList<>();
@@ -103,28 +159,48 @@ public class BracketPane extends BorderPane {
         buttons.add(customButton("SOUTH", Color.CORAL));
         buttons.add(customButton("FULL", Color.CORAL));
 
+        bracketNodeMap = new HashMap<>();
         // initializes each graphical representation of sub-trees
         // adds each to the panes map
+        int treeNum = 63;
+        int division = 1;
         for (int j = 0; j < buttons.size()-1; j++) {
+            if(division == 4){
+                treeNum = 109;
+            }
             GridPane tmp = new GridPane();
-            tmp.add(new Root(), 0, 0);
+            tmp.add(new Root(treeNum, division, teams), 0, 0);
             tmp.setAlignment(Pos.CENTER);
             panes.put(buttons.get(j),tmp);
+            treeNum += 16;
+            division++;
         }
 
         // Fills the "full" pane (Entire bracket view)
         GridPane fullPane = new GridPane();
         GridPane gp1 = new GridPane();
-        gp1.add(new Root(), 0, 0);
-        gp1.add(new Root(), 0, 1);
+        gp1.add(panes.get(buttons.get(0)), 0, 0);
+        gp1.add(panes.get(buttons.get(1)), 0, 1);
         GridPane gp2 = new GridPane();
-        gp2.add(new Root(), 0, 0);
-        gp2.add(new Root(), 0, 1);
+        gp2.add(panes.get(buttons.get(2)), 0, 0);
+        gp2.add(panes.get(buttons.get(3)), 0, 1);
         gp2.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         fullPane.add(gp1, 0, 0);
         fullPane.add(new Rectangle(400, 400, Color.TRANSPARENT), 1, 0);
+        //insert the last three Nodes (0,1,2)
+        BracketNode finalNode1 = new BracketNode(teams.get(1), 70, 400, 500, 100, 1);
+        bracketNodeMap.put(1, finalNode1);
+        BracketNode finalNode2 = new BracketNode(teams.get(2), 70, 400, 500, 100, 2);
+        bracketNodeMap.put(2, finalNode2);
+        BracketNode finalNode = new BracketNode(teams.get(0), 70, 600, 500, 100, 0);
+        bracketNodeMap.put(0, finalNode);
+        finalNode1.setOnMouseClicked(clicked);
+        finalNode2.setOnMouseClicked(clicked);
+        fullPane.add(finalNode1, 1,0);
+        fullPane.add(finalNode2, 2, 0);
+        fullPane.add(finalNode,1,0);
         fullPane.add(gp2, 2, 0);
-        fullPane.add(new Root(), 0, 0);
+        //fullPane.add(new Root(), 0, 0);
         fullPane.setAlignment(Pos.CENTER);
         panes.put(buttons.get((buttons.size()-1)), fullPane);
 
@@ -240,18 +316,39 @@ public class BracketPane extends BorderPane {
         return pane;
     }
 
+    private void saveBracket(Bracket bracket){
+        playerMap.put(bracket.getPlayerName(), bracket);
+    }
+
     /**
      * Creates the graphical representation of a subtree.
      * Note, this is a vague model. TODO: MAKE MODULAR
      */
     private class Root extends Pane {
 
-        public Root() {
-            createVertices(20, 25, 100, 25, 8, 50);
-            createVertices(120, 35, 100, 50, 4, 100);
-            createVertices(220, 60, 100, 100, 2, 200);
-            createVertices(320,119,100,200,1,0);
-            createVertices(420,200,100,20,0,0);
+        //create the bracket by giving the method of the first index of the round of a sub bracket
+        public Root(int treeNum, int division, ArrayList<String> teams) {
+            createVertices(20, 25, 100, 25, 8, 50, treeNum, teams);
+            if(division == 1){treeNum = 31;}
+            if(division == 2){treeNum = 39;}
+            if(division == 3){treeNum = 47;}
+            if(division == 4){treeNum = 54;}
+            createVertices(120, 35, 100, 50, 4, 100, treeNum, teams);
+            if(division == 1){treeNum = 15;}
+            if(division == 2){treeNum = 19;}
+            if(division == 3){treeNum = 23;}
+            if(division == 4){treeNum = 27;}
+            createVertices(220, 60, 100, 100, 2, 200, treeNum, teams);
+            if(division == 1){treeNum = 7;}
+            if(division == 2){treeNum = 9;}
+            if(division == 3){treeNum = 11;}
+            if(division == 4){treeNum = 13;}
+            createVertices(320,119,100,200,1,0, treeNum, teams);
+            if(division == 1){treeNum = 3;}
+            if(division == 2){treeNum = 4;}
+            if(division == 3){treeNum = 5;}
+            if(division == 4){treeNum = 6;}
+            createVertices(420,200,100,20,0,0, treeNum, teams);
 
             //TODO: Set names of nodes
             for (BracketNode n : nodes) {
@@ -265,11 +362,12 @@ public class BracketPane extends BorderPane {
          * Creates 3 lines in appropriate location unless it is the last line.
          * Adds these lines and "BracketNodes" to the Pane of this inner class
          */
-        private void createVertices(int iX, int iY, int iXO, int iYO, int num, int increment) {
+        private void createVertices(int iX, int iY, int iXO, int iYO, int num, int increment, int treeNum, ArrayList<String> teams) {
             int y = iY;
-
+            //last node on a subtree, only one BracketNode will be added
             if (num == 0 && increment == 0) {
-                BracketNode last = new BracketNode("", iX, y - 20, iXO, 20);
+                BracketNode last = new BracketNode("", iX, y - 20, iXO, 20, treeNum);
+                bracketNodeMap.put(treeNum, last);
                 nodes.add(last);
                 getChildren().addAll(new Line(iX,iY,iX+iXO,iY), last);
             } else {
@@ -278,8 +376,13 @@ public class BracketPane extends BorderPane {
                     Point2D tr = new Point2D(iX + iXO, y);
                     Point2D bl = new Point2D(iX, y + iYO);
                     Point2D br = new Point2D(iX + iXO, y + iYO);
-                    BracketNode nTop= new BracketNode("", iX, y - 20, iXO, 20);
-                    BracketNode nBottom = new BracketNode("", iX, y + (iYO - 20), iXO, 20);
+                    //create two BracketNode that will sit on top of the lines then add them to the hashMap to access them with a mouseEvent
+                    BracketNode nTop= new BracketNode(teams.get(treeNum), iX, y - 20, iXO, 20, treeNum);
+                    bracketNodeMap.put(treeNum, nTop);
+                    treeNum++;
+                    BracketNode nBottom = new BracketNode(teams.get(treeNum), iX, y + (iYO - 20), iXO, 20, treeNum);
+                    bracketNodeMap.put(treeNum, nBottom);
+                    treeNum++;
                     nodes.add(nTop);
                     nodes.add(nBottom);
                     Line top = new Line(tl.getX(), tl.getY(), tr.getX(), tr.getY());
@@ -301,6 +404,7 @@ public class BracketPane extends BorderPane {
         private String teamName;
         private Rectangle rect;
         private Label name;
+        private int treeNum;
 
         /**
          * Creates a BracketNode with,
@@ -310,7 +414,8 @@ public class BracketPane extends BorderPane {
          * @param rX The width of the rectangle to fill pane
          * @param rY The height of the rectangle
          */
-        public BracketNode(String teamName, int x, int y, int rX, int rY) {
+        public BracketNode(String teamName, int x, int y, int rX, int rY, int treeNum) {
+            this.treeNum = treeNum;
             this.setLayoutX(x);
             this.setLayoutY(y);
             this.setMaxSize(rX, rY);
@@ -338,5 +443,6 @@ public class BracketPane extends BorderPane {
             name.setText(teamName);
         }
 
+        public int getTreeNum(){ return treeNum;}
     }
 }

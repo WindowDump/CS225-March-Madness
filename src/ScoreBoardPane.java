@@ -107,8 +107,9 @@ public class ScoreBoardPane {
 
 
     private ObservableList<Map> generateDataInMap() {
+        int max = 16;
         ObservableList<Map> allData = FXCollections.observableArrayList();
-        for (int i = 1; i < MAX_PLAYER_NUMBER; i++) {
+        for (int i = 1; i < max; i++) {
             Map<String, String> scoresRow = new HashMap<>();
 
             String value1 = "player" + i;
