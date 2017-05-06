@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
+/*Hillary Ssemakula: This class tests deserialization of a file named hillary.ser */
 public class DeserializeTest
 {
   public static void main(String[] args)
