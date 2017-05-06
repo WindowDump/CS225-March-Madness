@@ -1,16 +1,11 @@
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -54,9 +49,8 @@ public class MarchMadnessGUI extends Application {
     
     private ArrayList<Bracket> playerBrackets;
     private HashMap<String, Bracket> playerMap;
+    private static final Bracket MASTER = new Bracket(TournamentInfo.loadStartingBracket());
 
-    
-  
     private ScoreBoardPane scoreBoard;
     private BracketPane bracketPane;
     private GridPane loginP;
@@ -66,18 +60,8 @@ public class MarchMadnessGUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         playerBrackets = new ArrayList<>();
-//        try {
-//            teamInfo=new TeamInfo();
-//        } catch (IOException ex) {
-//            Alert alert = new Alert(AlertType.ERROR);
-//            alert.setTitle("Error Dialog");
-//            alert.setHeaderText("Look, an Error Dialog");
-//            alert.setContentText("Ooops, there was an error!");
-//
-//            alert.showAndWait();
-//            //primaryStage.close();
-//        }
-
+            bracketPane= new BracketPane();
+            bracketPane.helper(3,8);
         // ??
         emptyBracket = new Bracket(new ArrayList<String>());
 
@@ -87,7 +71,7 @@ public class MarchMadnessGUI extends Application {
         
         root = new BorderPane();
         scoreBoard= new ScoreBoardPane();
-        bracketPane= new BracketPane();
+
         loginP=createLogin();
         CreateToolBars();
         
@@ -236,8 +220,7 @@ public class MarchMadnessGUI extends Application {
     
     
     private GridPane createLogin(){
-        
-        
+
         /*
         LoginPane
         Sergio and Joao
@@ -290,8 +273,7 @@ public class MarchMadnessGUI extends Application {
 
                 if (Objects.equals(password1, playerPass)) {
                     // load bracket
-                    //
-                    // bracketPane.setCurrent(playerMap.get(name));
+                     bracketPane.setBracket(playerMap.get(name));
                     System.out.println("load bracket of user: " + name);
                 } else {
                     System.out.println("Password incorrect!");
