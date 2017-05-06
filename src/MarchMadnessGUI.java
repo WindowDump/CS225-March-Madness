@@ -46,6 +46,8 @@ public class MarchMadnessGUI extends Application {
     private Bracket selectedBracket;
     private Bracket simResultBracket;
 
+    private TournamentInfo tournamentInfo;
+
     
     private ArrayList<Bracket> playerBrackets;
     private HashMap<String, Bracket> playerMap;
@@ -63,7 +65,15 @@ public class MarchMadnessGUI extends Application {
             bracketPane= new BracketPane();
             bracketPane.helper(3,8);
         // ??
-        emptyBracket = new Bracket(new ArrayList<String>());
+
+        //Get the starting bracket
+        try{
+            tournamentInfo = new TournamentInfo();
+        }
+        catch (java.io.IOException e){
+            System.out.println("error finding file");
+        }
+        emptyBracket = new Bracket(tournamentInfo.loadStartingBracket());
 
 
         playerMap = new HashMap<>();
@@ -71,7 +81,6 @@ public class MarchMadnessGUI extends Application {
         
         root = new BorderPane();
         scoreBoard= new ScoreBoardPane();
-
         loginP=createLogin();
         CreateToolBars();
         
@@ -128,19 +137,18 @@ public class MarchMadnessGUI extends Application {
     
     /**
      * displays the users bracket
-     * 
+     * @param bracket display current bracket that is loaded
+     * @param playerMap give an instance of the hashMap for BrackenPane to save a bracket
      */
-    private void viewBracket(){
-        displayPane(new BracketPane());
-        
+    private void viewBracket(Bracket bracket, HashMap<String, Bracket> playerMap){
+        displayPane(new BracketPane(bracket, playerMap));
     }
     
     private void clear(){
         
         
     }
-    
-    
+
     private void reset(){
         
     }
@@ -200,7 +208,7 @@ public class MarchMadnessGUI extends Application {
         login.setOnAction(e->login());
         simulate.setOnAction(e->simulate());
         scoreBoardButton.setOnAction(e->scoreBoard());
-        viewBracket.setOnAction(e->viewBracket());
+        viewBracket.setOnAction(e->viewBracket(selectedBracket, playerMap));
         clearButton.setOnAction(e->clear());
         resetButton.setOnAction(e->reset());
         finalizeButton.setOnAction(e->finalizeBracket());
@@ -287,6 +295,8 @@ public class MarchMadnessGUI extends Application {
                 tmpPlayerBracket.setPassword(playerPass);
 
                 playerMap.put(name, tmpPlayerBracket);
+                selectedBracket = tmpPlayerBracket;
+                viewBracket(tmpPlayerBracket, playerMap);
             }
         });
         

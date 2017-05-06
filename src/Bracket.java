@@ -4,8 +4,8 @@ import java.io.Serializable;
 /**
  * Bracket Class
  * Created by Matt and Dan on 5/1/2017.
+ * Contributor: Hillary Ssemakula 5/1
  */
-//Hillary Ssemakula 5/1
 public class Bracket implements Serializable //Hillary: This bracket class is to implement the serializable interface inorder to be serialized
 {
     //Attributes
@@ -130,26 +130,42 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         bracket.add(position, s);
     }
 
-    /******Hillary Ssemakula 5/1********/
-     /* @param String password, the player's password is set to the given parameter */
+    /** 
+     * Hillary Ssemakula:
+     * set player's password to string parameter 
+     * @param String password,
+     */
     public void setPassword(String password)
     {
         this.password = password;
     }
 
-    /*returns the player's name */
+      /** 
+        * Hillary: 
+        * returns the name of the player
+        * @return String
+        */
     public String getPlayerName()
     {
         return playerName;
     }
-
-    /* Hillary: returns the player's password */
+    
+      /** 
+        * Hillary:
+        * returns the player's password
+        * @return String
+        */
     public String getPassword()
     {
         return password;
     }
     
-    /* Hillary: checks whether there are no empty strings in the bracket, i.e. it's completely filled in */
+      /** 
+        * Hillary:
+        * returns true or false depending on whether there are any empty slots on the bracket.
+        * If a position has an empty string then the advancing team has not been chosen for that spot and the whole bracket is not complete.
+        * @return boolean.
+        */
     public boolean isComplete()
     {
         for(String team: bracket){
@@ -158,19 +174,21 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         return true;
     }
     
-    /* Hillary: checks whether subtree starting at root is complete  INCOMPLETE-MIGHT NEED IMPROVEMENT
-    * update by matt and hillary 5/2, now works*/
+    /** 
+      * Hillary:
+      * returns true or false depending on whether there are any empty slots in te bracket from a given point all the way to the starting 64 teams.
+      * If the root itself is empty return false. otherwise the method is recursively applied to the left and right subtrees of the root.
+      * @param int root.
+      * @return boolean
+    *update by matt and hillary 5/2 */
     public boolean isSubtreeComplete(int root)
     {
         if(bracket.get(root).equals(""))
             return false;
         int rightChild = 2 * root + 2;
         int leftChild = 2 * root + 1;
-        //else if(rightChild < bracket.size()) return isSubtreeComplete(rightChild);
-        //else if(leftChild < bracket.size()) return isSubtreeComplete(leftChild);
         if(leftChild< bracket.size() && rightChild<bracket.size())
             return isSubtreeComplete(leftChild) && isSubtreeComplete(rightChild);
-
         return true;
     }
 
