@@ -1,3 +1,5 @@
+//package marchmadness;
+
 import javafx.geometry.Insets;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,7 +26,7 @@ import java.util.Map;
  * ScoreBoardPane class is the class the displays the Scoreboard from the Main GUI.
  * It shows all of the Player's names and their scores.
  */
-public class ScoreBoardPane {
+public class ScoreBoardPane{
 
     /**
      * attributes contributed by Ying Sun
@@ -35,17 +37,16 @@ public class ScoreBoardPane {
     /**
      * attributes contributed by Sarah Higgins
      */
-    public static final String Column1MapKey = "  ";
-    public static final int Column2MapKey = 0;
+    public static final String Column1MapKey = "PlayerName";
+    public static final String Column2MapKey = "Player Score";
 
-    /**
-     * ScoreBoardPane constructor
-     */
-    public ScoreBoardPane() {
 
-    }
 
+    
+
+   
     public TableView _start() {
+  
 
         final Label label = new Label("March Madness");
         label.setFont(new Font("Arial", 20));
@@ -107,15 +108,16 @@ public class ScoreBoardPane {
 
 
     private ObservableList<Map> generateDataInMap() {
+        int max = 16;
         ObservableList<Map> allData = FXCollections.observableArrayList();
-        for (int i = 1; i < MAX_PLAYER_NUMBER; i++) {
+        for (int i = 1; i < max; i++) {
             Map<String, String> scoresRow = new HashMap<>();
 
             String value1 = "player" + i;
             String value2 = "score" + i;
 
             scoresRow.put(Column1MapKey, value1);
-            scoresRow.put(Column1MapKey, value2);
+            scoresRow.put(Column2MapKey, value2);
 
             allData.add(scoresRow);
         }
