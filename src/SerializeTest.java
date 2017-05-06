@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 
-
+/* Hillary Ssemakula: This class tests serialization of a bracket */
 public class SerializeTest
 {
   public static void main(String[] args)
