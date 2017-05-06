@@ -139,19 +139,29 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         this.password = password;
     }
 
-    /*returns the player's name */
+      /* Hillary
+         Method getPlayerName
+         @return String: the name of the player is returned as a String
+        */
     public String getPlayerName()
     {
         return playerName;
     }
-
-    /* Hillary: returns the player's password */
+    
+      /* Hillary
+         Method getPassword
+         @return String: the player's password is returned as a String
+        */
     public String getPassword()
     {
         return password;
     }
     
-    /* Hillary: checks whether there are no empty strings in the bracket, i.e. it's completely filled in */
+      /* Hillary
+         Method isComplete
+         @return boolean: returns true or false depending on whether there are any empty strings in the bracket.
+         If a position has an empty string then the advancing team has not been chosen for that spot and the whole bracket is not complete.
+        */
     public boolean isComplete()
     {
         for(String team: bracket){
