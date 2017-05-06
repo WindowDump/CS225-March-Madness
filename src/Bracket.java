@@ -131,7 +131,9 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     }
 
     /******Hillary Ssemakula 5/1********/
-     /* @param String password, the player's password is set to the given parameter */
+     /* Method setPassword
+        @param String password: the player's password is set to the given string parameter 
+        */
     public void setPassword(String password)
     {
         this.password = password;
