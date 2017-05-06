@@ -131,9 +131,9 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     }
 
     /** 
-     * Hillary Ssemakula 5/1 
-     * Method setPassword 
-     * @param String password: the player's password is set to the given string parameter 
+     * Hillary Ssemakula
+     * set player's password to string parameter 
+     * @param String password,
      */
     public void setPassword(String password)
     {
@@ -141,9 +141,9 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     }
 
       /** 
-        * Hillary
-        * Method getPlayerName
-        * @return String: the name of the player is returned as a String
+        * Hillary 
+        * returns the name of the player
+        * @return String
         */
     public String getPlayerName()
     {
@@ -152,8 +152,8 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     
       /** 
         * Hillary
-        * Method getPassword 
-        * @return String: the player's password is returned as a String
+        * returns the player's password
+        * @return String
         */
     public String getPassword()
     {
@@ -162,9 +162,9 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     
       /** 
         * Hillary
-        * Method isComplete
-        * @return boolean: returns true or false depending on whether there are any empty strings in the bracket.
+        * returns true or false depending on whether there are any empty slots on the bracket.
         * If a position has an empty string then the advancing team has not been chosen for that spot and the whole bracket is not complete.
+        * @return boolean.
         */
     public boolean isComplete()
     {
@@ -176,10 +176,10 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     
     /** 
       * Hillary
-      * Method isSubtreeComplete
+      * returns true or false depending on whether there are any empty slots in te bracket from a given point all the way to the starting 64 teams.
+      * If the root itself is empty return false. otherwise the method is recursively applied to the left and right subtrees of the root.
       * @param int root.
-      *@return boolean: returns true or false depending on whether there are any empty strings in the subTree from the given root.
-      *If the root itself is empty return false. otherwise the method is recursively applied to the left and right subtrees of the root.
+      * @return boolean: 
     *update by matt and hillary 5/2 */
     public boolean isSubtreeComplete(int root)
     {
