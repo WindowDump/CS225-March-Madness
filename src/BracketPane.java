@@ -22,6 +22,7 @@ import javafx.scene.text.TextAlignment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javafx.scene.layout.Region;
 
 /**
  * Created by Richard and Ricardo on 5/3/17.
@@ -129,6 +130,7 @@ public class BracketPane extends BorderPane {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, text,  ButtonType.CLOSE);
                         alert.setTitle("March Madness Bracket Simulator");
                         alert.setHeaderText(null);
+                        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                         alert.showAndWait();
                 }
         };
