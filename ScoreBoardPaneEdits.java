@@ -45,8 +45,8 @@ public class ScoreBoardPaneEdits {
 
     public TableView _start() {
 
-        final Label label = new Label("March Madness");
-        label.setFont(new Font("Arial", 20));
+       // final Label label = new Label("March Madness");
+       // label.setFont(new Font("Arial", 20));
 
         /**
          * TableColumn userNameCol is the column on the left side of the table
@@ -98,9 +98,9 @@ public class ScoreBoardPaneEdits {
         totalPtsCol.setCellFactory(cellFactoryForMap);
 
         final VBox vbox = new VBox();
-        vbox.setSpacing(6);
-        vbox.setPadding(new Insets(12, 0, 0, 12));
-        vbox.getChildren().addAll(label, table_view);
+        //vbox.setSpacing(6);
+        //vbox.setPadding(new Insets(12, 0, 0, 12));
+        //vbox.getChildren().addAll(table_view);
 
         return table_view;
     }
