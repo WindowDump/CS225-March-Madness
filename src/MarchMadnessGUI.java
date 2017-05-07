@@ -21,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -181,18 +182,19 @@ public class MarchMadnessGUI extends Application {
     }
     
      /**
+      * @author
+      *  updated by Grant & Tyler to implement ScrollPane
       * Displays Simulated Bracket
       * 
       */
     private void viewBracket(){
-       selectedBracket=simResultBracket;
-       bracketPane=new BracketPane(selectedBracket);
-       GridPane full = bracketPane.getFullPane();
-       full.setAlignment(Pos.CENTER);
-       full.setDisable(true);
-       displayPane(full);
-        
-    }
+    	 selectedBracket=simResultBracket;
+         bracketPane=new BracketPane(selectedBracket);
+         GridPane full = bracketPane.getFullPane();
+         full.setAlignment(Pos.CENTER);
+         full.setDisable(true);
+         displayPane(new ScrollPane(full)); 
+      }
     
     /**
      * allows user to choose bracket
