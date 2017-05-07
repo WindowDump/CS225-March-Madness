@@ -2,11 +2,9 @@ import javafx.event.EventHandler;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.InnerShadow;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -18,7 +16,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -60,7 +57,9 @@ public class BracketPane extends BorderPane {
          *  Reverse of the above;
          */
         private HashMap<Integer,BracketNode> nodeMap = new HashMap<>();
-
+        /**
+         * Handles clicked events for BracketNode objects
+         */
         /**
          * Clears the entries of a team future wins
          * @param treeNum
@@ -73,64 +72,42 @@ public class BracketPane extends BorderPane {
                 }
         }
 
-        /**
-         * Handles clicked events for BracketNode objects
-         */
         private EventHandler<MouseEvent> clicked = mouseEvent -> {
-                //conditional added by matt 5/7 to differentiate between left and right mouse click
-                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                        BracketNode n = (BracketNode) mouseEvent.getSource();
-                        int treeNum = bracketMap.get(n);
-                        int nextTreeNum = (treeNum - 1) / 2;
-                        //The starting ends of the bracket (63 - 126) will cause a team to move up.
-                        if (treeNum >= 63) {
-                                //If the next node contains text, the team will be moved down and new team moved up
-                                if (!nodeMap.get(nextTreeNum).getName().isEmpty()) {
-                                        currentBracket.removeAbove((nextTreeNum));
-                                        clearAbove(treeNum);
-                                        nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
-                                        currentBracket.moveTeamUp(treeNum);
-                                } else {
-                                        nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
-                                        currentBracket.moveTeamUp(treeNum);
-                                }
-                        }
-                        //treeNum < 63
-                        else {
-                                //check to see if the next node contains a team, if it does move team down and clear all the team progress from above the node
-                                if (!nodeMap.get(nextTreeNum).getName().isEmpty()) {
-                                        currentBracket.removeAbove(nextTreeNum);
-                                        clearAbove(treeNum);
-                                        nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
-                                        currentBracket.moveTeamUp(treeNum);
-                                } else {
-                                        nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
-                                        currentBracket.moveTeamUp(treeNum);
-                                        System.out.println(currentBracket.getBracket().toString());
-                                }
-                        }
-                }
-                //added by matt 5/7, shows the teams info if you right click
-                else if(mouseEvent.getButton().equals(MouseButton.SECONDARY)){
-                        String text = "";
-                        BracketNode n = (BracketNode) mouseEvent.getSource();
-                        int treeNum = bracketMap.get(n);
-                        String teamName = currentBracket.getBracket().get(treeNum);
-                        try {
-                                TournamentInfo info = new TournamentInfo();
-                                Team t = info.getTeam(teamName);
-                                text+= "Team: "+ teamName +"\nInfo: "+ t.getInfo();
-                        }
-                        catch (IOException e){//if for some reason TournamentInfo isnt working, it will display info not found
-                                text+="Info for "+teamName+ "not found";
-                        }
-                        //create a popup with the team info
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, text,  ButtonType.CLOSE);
-                        alert.setTitle("March Madness Bracket Simulator");
-                        alert.setHeaderText(null);
-                        alert.showAndWait();
-                }
-        };
+                BracketNode n = (BracketNode) mouseEvent.getSource();
+                int treeNum = bracketMap.get(n);
+                int nextTreeNum = (treeNum - 1) / 2;
+                
+                	
+                //The starting ends of the bracket (63 - 126) will cause a team to move up.
+	                if (treeNum >= 63) {
+	                        //If the next node contains text, the team will be moved down and new team moved up
+	                        if (!nodeMap.get(nextTreeNum).getName().isEmpty()) {
+	                                currentBracket.removeAbove((nextTreeNum));
+	                                clearAbove(treeNum);
+	                                nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
+	                                currentBracket.moveTeamUp(treeNum);
+	                        }
+	                        else{
+	                                nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
+	                                currentBracket.moveTeamUp(treeNum);
+	                        }
+	                }
+	                //treeNum < 63
+	                else {
+	                        //check to see if the next node contains a team, if it does move team down and clear all the team progress from above the node
+	                        if(!nodeMap.get(nextTreeNum).getName().isEmpty()) {
+	                                currentBracket.removeAbove(nextTreeNum);
+	                                clearAbove(treeNum);
+	                                nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
+	                                currentBracket.moveTeamUp(treeNum);
+	                        }
+	                        else {
+	                                nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
+	                                currentBracket.moveTeamUp(treeNum);
+	                                System.out.println(currentBracket.getBracket().toString());
+	                        }
+	                }
+	        };
         /**
          * Handles mouseEntered events for BracketNode objects
          */
@@ -224,11 +201,19 @@ public class BracketPane extends BorderPane {
                         });
                         t.setOnMouseClicked(mouseEvent -> {
                                 setCenter(null);
-                                center.add(panes.get(t),0,0);
+                                /**
+                                 * @update Grant & Tyler 
+                                 * 			panes are added as ScrollPanes to retain center alignment when moving through full-view and region-view
+                                 */
+                                center.add(new ScrollPane(panes.get(t)),0,0); 
                                 center.setAlignment(Pos.CENTER);
                                 setCenter(center);
                         });
                 }
+                
+                //ScrollPane p=new ScrollPane(this);
+               // p.setContent(this);
+                
 
         }
 
