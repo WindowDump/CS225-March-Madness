@@ -59,12 +59,50 @@ public class BracketPane extends BorderPane {
         /**
          * Handles clicked events for BracketNode objects
          */
+        /**
+         * Clears the entries of a team future wins
+         * @param treeNum
+         */
+        private void clearAbove(int treeNum){
+                int nextTreeNum = (treeNum - 1) / 2;
+                if (!nodeMap.get(nextTreeNum).getName().isEmpty()) {
+                        nodeMap.get(nextTreeNum).setName("");
+                        clearAbove(nextTreeNum);
+                }
+        }
+
         private EventHandler<MouseEvent> clicked = mouseEvent -> {
                 BracketNode n = (BracketNode) mouseEvent.getSource();
-                // TODO THIS IS A CURRENT WORKAROUND FOR MISSING BRACKET ELEMENTS ( Championship game ).
-                if (bracketMap.get(n) > 6) {
-                        currentBracket.moveTeamUp(bracketMap.get(n));
-                        nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
+                int treeNum = bracketMap.get(n);
+                int nextTreeNum = (treeNum - 1) / 2;
+                //The starting ends of the bracket (63 - 126) will cause a team to move up.
+                if (treeNum >= 63) {
+                        //If the next node contains text, the team will be moved down and new team moved up
+                        if (!nodeMap.get(nextTreeNum).getName().isEmpty()) {
+                                currentBracket.removeAbove((nextTreeNum));
+                                clearAbove(treeNum);
+                                nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
+                                currentBracket.moveTeamUp(treeNum);
+                        }
+                        else{
+                                nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
+                                currentBracket.moveTeamUp(treeNum);
+                        }
+                }
+                //treeNum < 63
+                else {
+                        //check to see if the next node contains a team, if it does move team down and clear all the team progress from above the node
+                        if(!nodeMap.get(nextTreeNum).getName().isEmpty()) {
+                                currentBracket.removeAbove(nextTreeNum);
+                                clearAbove(treeNum);
+                                nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
+                                currentBracket.moveTeamUp(treeNum);
+                        }
+                        else {
+                                nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
+                                currentBracket.moveTeamUp(treeNum);
+                                System.out.println(currentBracket.getBracket().toString());
+                        }
                 }
         };
         /**
@@ -116,7 +154,9 @@ public class BracketPane extends BorderPane {
                         roots.add(new Root(3 + m));
                         panes.put(buttons.get(m), roots.get(m));
                 }
-
+                Pane finalPane = createFinalFour();
+                //buttons.add(customButton("FINAL"));
+                //panes.put(buttons.get(5), finalPane);
                 GridPane fullPane = new GridPane();
                 GridPane gp1 = new GridPane();
                 gp1.add(roots.get(0), 0, 0);
@@ -127,10 +167,11 @@ public class BracketPane extends BorderPane {
                 gp2.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 
                 fullPane.add(gp1, 0, 0);
-                fullPane.add(new Rectangle(400, 400, Color.TRANSPARENT), 1, 0);
+                fullPane.add(finalPane,1,0, 1,2);
                 fullPane.add(gp2, 2, 0);
                 fullPane.setAlignment(Pos.CENTER);
                 panes.put(buttons.get((buttons.size() - 1)), fullPane);
+                finalPane.toBack();
 
                 // Initializes the button grid
                 GridPane buttonGrid = new GridPane();
@@ -238,6 +279,43 @@ public class BracketPane extends BorderPane {
                 pane.getChildren().addAll(r, t);
                 pane.setStyle("-fx-background-color: orange;");
                 return pane;
+        }
+
+        public Pane createFinalFour(){
+                Pane finalPane = new Pane();
+                BracketNode nodeFinal0 = new BracketNode("", 162, 300, 70, 0);
+                BracketNode nodeFinal1 = new BracketNode("", 75, 400, 70, 0);
+                BracketNode nodeFinal2 = new BracketNode("", 250, 400, 70, 0);
+                nodeFinal0.setName(currentBracket.getBracket().get(0));
+                nodeFinal1.setName(currentBracket.getBracket().get(1));
+                nodeFinal2.setName(currentBracket.getBracket().get(2));
+                finalPane.getChildren().add(nodeFinal0);
+                finalPane.getChildren().add(nodeFinal1);
+                finalPane.getChildren().add(nodeFinal2);
+                bracketMap.put(nodeFinal1, 1);
+                bracketMap.put(nodeFinal2, 2);
+                bracketMap.put(nodeFinal0, 0);
+                nodeMap.put(1, nodeFinal1);
+                nodeMap.put(2, nodeFinal2);
+                nodeMap.put(0, nodeFinal0);
+
+                nodeFinal0.setOnMouseClicked(clicked);
+                nodeFinal0.setOnMouseDragEntered(enter);
+                nodeFinal0.setOnMouseDragExited(exit);
+
+                nodeFinal1.setOnMouseClicked(clicked);
+                nodeFinal1.setOnMouseDragEntered(enter);
+                nodeFinal1.setOnMouseDragExited(exit);
+
+                nodeFinal2.setOnMouseClicked(clicked);
+                nodeFinal2.setOnMouseDragEntered(enter);
+                nodeFinal2.setOnMouseDragExited(exit);
+                nodeFinal0.setStyle("-fx-border-color: darkblue");
+                nodeFinal1.setStyle("-fx-border-color: darkblue");
+                nodeFinal2.setStyle("-fx-border-color: darkblue");
+                finalPane.setMinWidth(400.0);
+
+                return finalPane;
         }
 
         /**
