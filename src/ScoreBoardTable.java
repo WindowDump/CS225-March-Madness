@@ -1,22 +1,11 @@
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,26 +20,29 @@ public class ScoreBoardTable {
     /**
      * attributes
      */
-    private Map<Bracket, Integer> scores = new HashMap<Bracket, Integer>();
+    private Map<Bracket, Integer> scores;
     private static final int MAX_PLAYER_NUMBER = 16;
-    private TableView table = new TableView<Bracket>();
-    private ObservableList<Bracket> data =
-            FXCollections.observableArrayList();
+    private TableView<Bracket> table;
+    private ObservableList<Bracket> data;
 
     /**
-     * ScoreBoardPane constructor
+     * @author Sarah Higgins
+     * ScoreBoardPane constructor, makes the TableView object containing
+     * information about a Bracket Player and their total score
      */
+    @SuppressWarnings("unchecked")
     public ScoreBoardTable() {
-        TableView table = new TableView<Bracket>();
-        ObservableList<Bracket> data =
-                FXCollections.observableArrayList();
+        table = new TableView<>();
+        data = FXCollections.observableArrayList();
+        scores = new HashMap<>();
+
         /**
          * TableColumn userNameCol is the column on the left side of the table.
          * userNameCol.setCellValueFactory() passes the data to the TableView object, which is
          *                                   automatically sorted with the TableColumn.SortType.DESCENDING
          *                                   code line.
          */
-        TableColumn userNameCol = new TableColumn("Username");
+        TableColumn<Bracket, String> userNameCol = new TableColumn<>("Username");
         userNameCol.setMinWidth(140);
         userNameCol.setMaxWidth(140);
         userNameCol.setStyle("-fx-border-width: 3px");
@@ -68,7 +60,7 @@ public class ScoreBoardTable {
          *                                   automatically sorted with the TableColumn.SortType.DESCENDING
          *                                   code line.
          */
-        TableColumn totalPtsCol = new TableColumn("Total Points");
+        TableColumn<Bracket, Number> totalPtsCol = new TableColumn<>("Total Points");
         totalPtsCol.setMinWidth(140);
         totalPtsCol.setMaxWidth(140);
         totalPtsCol.setStyle("-fx-border-width: 3px");
@@ -86,15 +78,24 @@ public class ScoreBoardTable {
          */
         table.setItems(data);
         table.setEditable(false);
-        table.getSelectionModel().setCellSelectionEnabled(true);
+        //table.getSelectionModel().setCellSelectionEnabled(true);
         table.getColumns().setAll(userNameCol, totalPtsCol);
     }
 
-    public TableView start() {
+    /**
+     * method start
+     * @return the TableView object containing all of the data for the Bracket
+     */
+    public TableView<Bracket> start() {
         return table;
     }
 
-    //Ying's code, method addPlayer adds a player to the Bracket
+    /**
+     * @author Ying Sun and Sarah Higgins
+     * method addPlayer adds Bracket players to the Table
+     * @param name is the Player's name
+     * @param score is the Player's current score
+     */
     public void addPlayer(Bracket name, int score) {
         try {
             if (scores == null) {
@@ -104,15 +105,20 @@ public class ScoreBoardTable {
             //is less than 16 players
             if (scores.get(name) != null || scores.size() < MAX_PLAYER_NUMBER) {
                 scores.put(name, score);
+                data.add(name);
+                //System.out.println("added: " + name.getPlayerName() + " " + score);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    //Ying's code, method clears the players from the Bracket
+    /**
+     * @author Ying Sun and Sarah Higgins
+     * method clearPlayers erases all of the players in the table from view
+     */
     public void clearPlayers() {
         scores = new HashMap<Bracket, Integer>();
+        data = FXCollections.observableArrayList();
     }
-
 }
