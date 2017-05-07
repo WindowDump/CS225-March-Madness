@@ -17,6 +17,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     static final int WEST_BRACKET = 4;
     static final int MIDWEST_BRACKET = 5;
     static final int SOUTH_BRACKET = 6;
+    public static final long serialVersionUID = 5609181678399742983L;
 
     //Constructor
     /**
@@ -133,7 +134,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     /** 
      * Hillary Ssemakula:
      * set player's password to string parameter 
-     * @param String password,
+     * @param password, a String
      */
     public void setPassword(String password)
     {
@@ -178,7 +179,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
       * Hillary:
       * returns true or false depending on whether there are any empty slots in te bracket from a given point all the way to the starting 64 teams.
       * If the root itself is empty return false. otherwise the method is recursively applied to the left and right subtrees of the root.
-      * @param int root.
+      * @param root, the int index of the root
       * @return boolean
     *update by matt and hillary 5/2 */
     public boolean isSubtreeComplete(int root)
