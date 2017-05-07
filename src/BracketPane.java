@@ -123,8 +123,13 @@ public class BracketPane extends BorderPane {
                 tmp.setEffect(null);
 
         };
+        
+        public GridPane getFullPane(){return fullPane;}
 
         private GridPane center;
+        private GridPane fullPane;
+        
+        
 
         /**
          * TODO: Reduce. reuse, recycle!
@@ -157,7 +162,7 @@ public class BracketPane extends BorderPane {
                 Pane finalPane = createFinalFour();
                 //buttons.add(customButton("FINAL"));
                 //panes.put(buttons.get(5), finalPane);
-                GridPane fullPane = new GridPane();
+                 fullPane = new GridPane();
                 GridPane gp1 = new GridPane();
                 gp1.add(roots.get(0), 0, 0);
                 gp1.add(roots.get(1), 0, 1);
