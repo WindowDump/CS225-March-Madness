@@ -49,7 +49,7 @@ public class ScoreBoardTable {
                 return new SimpleStringProperty(b.getValue().getPlayerName());
             }
         });
-        userNameCol.setSortable(false);
+        userNameCol.setSortable(true);
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING); //sorts column from highest to lowest
 
         /**
@@ -77,11 +77,8 @@ public class ScoreBoardTable {
         
         table.setItems(data);
         table.setEditable(false);
-        
-        //table.getSelectionModel().setCellSelectionEnabled(true
-        table.sort();
         table.getColumns().setAll(userNameCol, totalPtsCol);
-        
+        table.getSortOrder().addAll(totalPtsCol, userNameCol);
     }
 
     public TableView<Bracket> start() {
@@ -100,6 +97,7 @@ public class ScoreBoardTable {
             if (scores.get(name) != null || scores.size() < MAX_PLAYER_NUMBER) {
                 scores.put(name, score);
                 data.add(name);
+                table.sort();
                 //System.out.println("added: " + name.getPlayerName() + " " + score);
             }
         } catch (Exception e) {
