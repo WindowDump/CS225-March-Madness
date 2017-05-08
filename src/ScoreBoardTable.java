@@ -26,9 +26,7 @@ public class ScoreBoardTable {
     private ObservableList<Bracket> data;
 
     /**
-     * @author Sarah Higgins
-     * ScoreBoardPane constructor, makes the TableView object containing
-     * information about a Bracket Player and their total score
+     * ScoreBoardPane constructor
      */
     @SuppressWarnings("unchecked")
     public ScoreBoardTable() {
@@ -52,7 +50,7 @@ public class ScoreBoardTable {
             }
         });
         userNameCol.setSortable(false);
-        userNameCol.setSortType(TableColumn.SortType.DESCENDING); //sorts column from highest to lowest
+        //userNameCol.setSortType(TableColumn.SortType.DESCENDING); //sorts column from highest to lowest
 
         /**
          * TableColumn totalPtsCol is the column on the right side of the table
@@ -69,33 +67,29 @@ public class ScoreBoardTable {
                 return new SimpleIntegerProperty(scores.get(b.getValue()));
             }
         });
-        totalPtsCol.setSortable(false);
-        totalPtsCol.setSortType(TableColumn.SortType.DESCENDING); //sorts column from highest to lowest
+        totalPtsCol.setSortable(true);
+        totalPtsCol.setSortType(TableColumn.SortType.ASCENDING); //sorts column from highest to lowest
 
         /**
          * TableView table_view is what the user sees in the GUI. This creates the table.
          *
          */
+        
         table.setItems(data);
         table.setEditable(false);
-        //table.getSelectionModel().setCellSelectionEnabled(true);
+        
+        //table.getSelectionModel().setCellSelectionEnabled(true
+        table.sort();
         table.getColumns().setAll(userNameCol, totalPtsCol);
+        
     }
 
-    /**
-     * method start
-     * @return the TableView object containing all of the data for the Bracket
-     */
     public TableView<Bracket> start() {
+                
         return table;
     }
 
-    /**
-     * @author Ying Sun and Sarah Higgins
-     * method addPlayer adds Bracket players to the Table
-     * @param name is the Player's name
-     * @param score is the Player's current score
-     */
+    //Ying's code, method addPlayer adds a player to the Bracket
     public void addPlayer(Bracket name, int score) {
         try {
             if (scores == null) {
@@ -113,10 +107,7 @@ public class ScoreBoardTable {
         }
     }
 
-    /**
-     * @author Ying Sun and Sarah Higgins
-     * method clearPlayers erases all of the players in the table from view
-     */
+    //Ying's code, method clears the players from the Bracket
     public void clearPlayers() {
         scores = new HashMap<Bracket, Integer>();
         data = FXCollections.observableArrayList();
