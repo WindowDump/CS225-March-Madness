@@ -27,6 +27,8 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
         String name;
         String info;
         int ranking;
+        double offensivePPG;
+        double defensivePPG;
 
 
         try{
@@ -35,7 +37,10 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
             while((name = br.readLine()) != null){
                 info = br.readLine();
                 ranking = Integer.parseInt(br.readLine());
-                Team newTeam = new Team(name, info, ranking); //creates team with info
+                offensivePPG = Double.parseDouble(br.readLine());
+                defensivePPG = Double.parseDouble(br.readLine());
+                
+                Team newTeam = new Team(name, info, ranking, offensivePPG, defensivePPG); //creates team with info
 
                 br.readLine();   //gets rid of empty line between team infos
 
@@ -114,6 +119,8 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
             while((name = br.readLine()) != null){
                 starting.add(name);
             }
+            
+            br.close();
         }
         catch(IOException ioe){
             throw ioe;
