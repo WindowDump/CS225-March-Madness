@@ -107,7 +107,8 @@ public class BracketPane extends BorderPane {
                         try {
                                 TournamentInfo info = new TournamentInfo();
                                 Team t = info.getTeam(teamName);
-                                text += "Team: " + teamName + "\nInfo: " + t.getInfo();
+                                //by Tyler - added the last two pieces of info to the pop up window
+                                text += "Team: " + teamName + " | Ranking: " + t.getRanking() + "\nMascot: " + t.getNickname() + "\nInfo: " + t.getInfo() + "\nAverage Offensive PPG: " + t.getOffensePPG() + "\nAverage Defensive PPG: "+ t.getDefensePPG();
                         } catch (IOException e) {//if for some reason TournamentInfo isnt working, it will display info not found
                                 text += "Info for " + teamName + "not found";
                         }

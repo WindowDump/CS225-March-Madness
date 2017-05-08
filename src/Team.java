@@ -9,6 +9,7 @@
 public class Team{
 
   private String name;
+  private String nickname;
   private String info;
   private int ranking;
   public double offensePPG;
@@ -23,8 +24,9 @@ public class Team{
    * @param ranking
    * 		The ranking in the team region from 1 to 16
    */
-  public Team(String name, String info, int ranking, double oPPG, double dPPG){
+  public Team(String name, String nickname, String info, int ranking, double oPPG, double dPPG){
     this.name = name;
+    this.nickname = nickname;
     this.info = info;
     this.ranking = ranking;
     offensePPG = oPPG;
@@ -33,7 +35,7 @@ public class Team{
     
   /**
    * 
-   * @return name
+   * @return name the name of the team
    */
   public String getName(){
     return name;
@@ -41,7 +43,15 @@ public class Team{
   
   /**
    * 
-   * @return info
+   * @return nickname the mascot of the team
+   */
+  public String getNickname(){
+	  return nickname;
+  }
+  
+  /**
+   * 
+   * @return info a short description of the team
    */
   public String getInfo(){
     return info;
@@ -49,7 +59,7 @@ public class Team{
   
   /**
    * 
-   * @return ranking
+   * @return ranking the ranking from 1 - 16
    */
   public int getRanking(){
     return ranking;
@@ -57,7 +67,7 @@ public class Team{
   
   /**
    * 
-   * @return offensePPG
+   * @return offensePPG the average points per game for offense
    */
   public double getOffensePPG(){
     return offensePPG;
@@ -78,6 +88,14 @@ public class Team{
    */
   public void setInfo(String info){
     this.info = info;
+  }
+  
+  /**
+   * 
+   * @param newNickname the new nickname for a team
+   */
+  public void setNickname(String newNickname){
+	  nickname = newNickname;
   }
   
   /**

@@ -25,6 +25,7 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
     private void loadFromFile() throws IOException{
 
         String name;
+        String nickname;
         String info;
         int ranking;
         double offensivePPG;
@@ -35,12 +36,13 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
             BufferedReader br = new BufferedReader(new FileReader("teamInfo.txt"));
 
             while((name = br.readLine()) != null){
+            	nickname = br.readLine();
                 info = br.readLine();
                 ranking = Integer.parseInt(br.readLine());
                 offensivePPG = Double.parseDouble(br.readLine());
                 defensivePPG = Double.parseDouble(br.readLine());
                 
-                Team newTeam = new Team(name, info, ranking, offensivePPG, defensivePPG); //creates team with info
+                Team newTeam = new Team(name, nickname, info, ranking, offensivePPG, defensivePPG); //creates team with info
 
                 br.readLine();   //gets rid of empty line between team infos
 
