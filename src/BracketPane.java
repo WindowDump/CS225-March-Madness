@@ -76,6 +76,11 @@ public class BracketPane extends BorderPane {
                         clearAbove(nextTreeNum);
                 }
         }
+        
+        
+        public void clear(){
+            clearSubtree(displayedSubtree);
+        }
 
         /**
          * Handles clicked events for BracketNode objects
@@ -147,6 +152,7 @@ public class BracketPane extends BorderPane {
          * Initializes the properties needed to construct a bracket.
          */
         public BracketPane(Bracket currentBracket) {
+                displayedSubtree=0;
                 this.currentBracket = currentBracket;
 
                 bracketMap = new HashMap<>();
@@ -216,6 +222,8 @@ public class BracketPane extends BorderPane {
                                 center.add(new ScrollPane(panes.get(t)), 0, 0);
                                 center.setAlignment(Pos.CENTER);
                                 setCenter(center);
+                                //Grant 5/7 this is for clearing the tree it kind of works 
+                                displayedSubtree=buttons.indexOf(t)==7?0:buttons.indexOf(t)+3;
                         });
                 }
 
@@ -401,9 +409,11 @@ public class BracketPane extends BorderPane {
                                 }
                                 ArrayList<Integer> tmpHelp = helper(location, num);
                                 for (int j = 0; j < aNodeList.size(); j++) {
+                                        //System.out.println(currentBracket.getBracket().get(tmpHelp.get(j)));
                                         aNodeList.get(j).setName(currentBracket.getBracket().get(tmpHelp.get(j)));
                                         bracketMap.put(aNodeList.get(j), tmpHelp.get(j));
                                         nodeMap.put(tmpHelp.get(j), aNodeList.get(j));
+                                        //System.out.println(bracketMap.get(aNodeList.get(j)));
                                 }
                         }
 
