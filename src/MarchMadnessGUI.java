@@ -59,7 +59,7 @@ public class MarchMadnessGUI extends Application {
     private Button back;
   
     
-    private  Bracket startingBracket; 
+    private  Bracket startingBracket;
     //reference to currently logged in bracket
     private Bracket selectedBracket;
     private Bracket simResultBracket;
@@ -82,8 +82,8 @@ public class MarchMadnessGUI extends Application {
         //try to load all the files, if there is an error display it
         try{
             teamInfo=new TournamentInfo();
-            startingBracket= new Bracket(TournamentInfo.loadStartingBracket());
-            simResultBracket=new Bracket(TournamentInfo.loadStartingBracket());
+            startingBracket= new Bracket(teamInfo.loadStartingBracket());
+            simResultBracket=new Bracket(teamInfo.loadStartingBracket());
         } catch (IOException ex) {
             showError(new Exception("Can't find "+ex.getMessage(),ex),true);
         }
@@ -407,8 +407,7 @@ public class MarchMadnessGUI extends Application {
      * The Exception handler
      * Displays a error message to the user
      * and if the error is bad enough closes the program
-     * @param msg message to be displayed to the user
-     * @param fatal true if the program should exit. false otherwise 
+     * @param fatal true if the program should exit. false otherwise
      */
     private void showError(Exception e,boolean fatal){
         String msg=e.getMessage();
@@ -502,8 +501,7 @@ public class MarchMadnessGUI extends Application {
       /**
      * Tayon Watson 5/5
      * deseralizedBracket
-     * @param filename of the seralized bracket file
-     * @return deserialized bracket 
+     * @return deserialized bracket
      */
     private ArrayList<Bracket> loadBrackets()
     {   

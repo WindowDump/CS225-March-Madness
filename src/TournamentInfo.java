@@ -1,6 +1,5 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -33,7 +32,8 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
 
 
         try{
-            BufferedReader br = new BufferedReader(new FileReader("teamInfo.txt"));
+            InputStream u = getClass().getResourceAsStream("teamInfo.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(u));
 
             while((name = br.readLine()) != null){
             	nickname = br.readLine();
@@ -105,18 +105,21 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
 
     }
 
+
+
     /**
      * reads Strings from initialMatches.txt into an ArrayList in order to construct the starting bracket
      * @authors Matt, Artem
      * @return ArrayList of Strings
      */
-    public static ArrayList<String> loadStartingBracket() throws IOException{
+    public ArrayList<String> loadStartingBracket() throws IOException{
         String name;
         ArrayList<String> starting = new ArrayList<String>();
 
 
         try{
-            BufferedReader br = new BufferedReader(new FileReader("initialMatches.txt"));
+            InputStream u = getClass().getResourceAsStream("initialMatches.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(u));
 
             while((name = br.readLine()) != null){
                 starting.add(name);
