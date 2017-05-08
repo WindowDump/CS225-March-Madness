@@ -408,11 +408,11 @@ public class BracketPane extends BorderPane {
                                 }
                                 ArrayList<Integer> tmpHelp = helper(location, num);
                                 for (int j = 0; j < aNodeList.size(); j++) {
-                                        System.out.println(currentBracket.getBracket().get(tmpHelp.get(j)));
+                                        //System.out.println(currentBracket.getBracket().get(tmpHelp.get(j)));
                                         aNodeList.get(j).setName(currentBracket.getBracket().get(tmpHelp.get(j)));
                                         bracketMap.put(aNodeList.get(j), tmpHelp.get(j));
                                         nodeMap.put(tmpHelp.get(j), aNodeList.get(j));
-                                        System.out.println(bracketMap.get(aNodeList.get(j)));
+                                        //System.out.println(bracketMap.get(aNodeList.get(j)));
                                 }
                         }
 
