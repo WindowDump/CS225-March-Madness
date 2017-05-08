@@ -142,6 +142,8 @@ public class MarchMadnessGUI extends Application {
        for(Bracket b:playerBrackets){
            scoreBoard.addPlayer(b,b.scoreBracket(simResultBracket));
        }
+        
+        displayPane(table);
     }
     
     /**
