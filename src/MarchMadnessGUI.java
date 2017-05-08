@@ -360,6 +360,7 @@ public class MarchMadnessGUI extends Application {
 
         Button signButton = new Button("Sign in");
         loginPane.add(signButton, 1, 4);
+        signButton.setDefaultButton(true);//added by matt 5/7, lets you use sign in button by pressing enter
 
         Label message = new Label();
         loginPane.add(message, 1, 5);
