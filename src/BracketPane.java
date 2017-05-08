@@ -22,6 +22,7 @@ import javafx.scene.text.TextAlignment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import javafx.scene.layout.Region;
 
 /**
@@ -59,15 +60,16 @@ public class BracketPane extends BorderPane {
          */
         private HashMap<BracketNode, Integer> bracketMap = new HashMap<>();
         /**
-         *  Reverse of the above;
+         * Reverse of the above;
          */
-        private HashMap<Integer,BracketNode> nodeMap = new HashMap<>();
+        private HashMap<Integer, BracketNode> nodeMap = new HashMap<>();
 
         /**
          * Clears the entries of a team future wins
+         *
          * @param treeNum
          */
-        private void clearAbove(int treeNum){
+        private void clearAbove(int treeNum) {
                 int nextTreeNum = (treeNum - 1) / 2;
                 if (!nodeMap.get(nextTreeNum).getName().isEmpty()) {
                         nodeMap.get(nextTreeNum).setName("");
@@ -84,36 +86,15 @@ public class BracketPane extends BorderPane {
                         BracketNode n = (BracketNode) mouseEvent.getSource();
                         int treeNum = bracketMap.get(n);
                         int nextTreeNum = (treeNum - 1) / 2;
-                        //The starting ends of the bracket (63 - 126) will cause a team to move up.
-                        if (treeNum >= 63) {
-                                //If the next node contains text, the team will be moved down and new team moved up
-                                if (!nodeMap.get(nextTreeNum).getName().isEmpty()) {
-                                        currentBracket.removeAbove((nextTreeNum));
-                                        clearAbove(treeNum);
-                                        nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
-                                        currentBracket.moveTeamUp(treeNum);
-                                } else {
-                                        nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
-                                        currentBracket.moveTeamUp(treeNum);
-                                }
-                        }
-                        //treeNum < 63
-                        else {
-                                //check to see if the next node contains a team, if it does move team down and clear all the team progress from above the node
-                                if (!nodeMap.get(nextTreeNum).getName().isEmpty()) {
-                                        currentBracket.removeAbove(nextTreeNum);
-                                        clearAbove(treeNum);
-                                        nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
-                                        currentBracket.moveTeamUp(treeNum);
-                                } else {
-                                        nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
-                                        currentBracket.moveTeamUp(treeNum);
-                                        System.out.println(currentBracket.getBracket().toString());
-                                }
+                        if (!nodeMap.get(nextTreeNum).getName().equals(n.getName())) {
+                                currentBracket.removeAbove((nextTreeNum));
+                                clearAbove(treeNum);
+                                nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
+                                currentBracket.moveTeamUp(treeNum);
                         }
                 }
                 //added by matt 5/7, shows the teams info if you right click
-                else if(mouseEvent.getButton().equals(MouseButton.SECONDARY)){
+                else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
                         String text = "";
                         BracketNode n = (BracketNode) mouseEvent.getSource();
                         int treeNum = bracketMap.get(n);
@@ -121,13 +102,12 @@ public class BracketPane extends BorderPane {
                         try {
                                 TournamentInfo info = new TournamentInfo();
                                 Team t = info.getTeam(teamName);
-                                text+= "Team: "+ teamName +"\nInfo: "+ t.getInfo();
-                        }
-                        catch (IOException e){//if for some reason TournamentInfo isnt working, it will display info not found
-                                text+="Info for "+teamName+ "not found";
+                                text += "Team: " + teamName + "\nInfo: " + t.getInfo();
+                        } catch (IOException e) {//if for some reason TournamentInfo isnt working, it will display info not found
+                                text += "Info for " + teamName + "not found";
                         }
                         //create a popup with the team info
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, text,  ButtonType.CLOSE);
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, text, ButtonType.CLOSE);
                         alert.setTitle("March Madness Bracket Simulator");
                         alert.setHeaderText(null);
                         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
@@ -152,13 +132,14 @@ public class BracketPane extends BorderPane {
                 tmp.setEffect(null);
 
         };
-        
-        public GridPane getFullPane(){return fullPane;}
+
+        public GridPane getFullPane() {
+                return fullPane;
+        }
 
         private GridPane center;
         private GridPane fullPane;
-        
-        
+
 
         /**
          * TODO: Reduce. reuse, recycle!
@@ -191,7 +172,7 @@ public class BracketPane extends BorderPane {
                 Pane finalPane = createFinalFour();
                 //buttons.add(customButton("FINAL"));
                 //panes.put(buttons.get(5), finalPane);
-                 fullPane = new GridPane();
+                fullPane = new GridPane();
                 GridPane gp1 = new GridPane();
                 gp1.add(roots.get(0), 0, 0);
                 gp1.add(roots.get(1), 0, 1);
@@ -201,7 +182,7 @@ public class BracketPane extends BorderPane {
                 gp2.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 
                 fullPane.add(gp1, 0, 0);
-                fullPane.add(finalPane,1,0, 1,2);
+                fullPane.add(finalPane, 1, 0, 1, 2);
                 fullPane.add(gp2, 2, 0);
                 fullPane.setAlignment(Pos.CENTER);
                 panes.put(buttons.get((buttons.size() - 1)), fullPane);
@@ -231,7 +212,7 @@ public class BracketPane extends BorderPane {
                                  * @update Grant & Tyler 
                                  * 			panes are added as ScrollPanes to retain center alignment when moving through full-view and region-view
                                  */
-                                center.add(new ScrollPane(panes.get(t)),0,0); 
+                                center.add(new ScrollPane(panes.get(t)), 0, 0);
                                 center.setAlignment(Pos.CENTER);
                                 setCenter(center);
                         });
@@ -241,8 +222,9 @@ public class BracketPane extends BorderPane {
 
         /**
          * Helpful method to retrieve our magical numbers
+         *
          * @param root the root node (3,4,5,6)
-         * @param pos the position in the tree (8 (16) , 4 (8) , 2 (4) , 1 (2))
+         * @param pos  the position in the tree (8 (16) , 4 (8) , 2 (4) , 1 (2))
          * @return The list representing the valid values.
          */
         public ArrayList<Integer> helper(int root, int pos) {
@@ -259,6 +241,7 @@ public class BracketPane extends BorderPane {
 
         /**
          * Sets the current bracket to,
+         *
          * @param target The bracket to replace currentBracket
          */
         public void setBracket(Bracket target) {
@@ -267,6 +250,7 @@ public class BracketPane extends BorderPane {
 
         /**
          * Clears the sub tree from,
+         *
          * @param position The position to clear after
          */
         public void clearSubtree(int position) {
@@ -283,6 +267,7 @@ public class BracketPane extends BorderPane {
         /**
          * Requests a message from current bracket to tell if the bracket
          * has been completed.
+         *
          * @return True if completed, false otherwise.
          */
         public boolean isComplete() {
@@ -306,6 +291,7 @@ public class BracketPane extends BorderPane {
 
         /**
          * Returns a custom "Button" with specified
+         *
          * @param name The name of the button
          * @return pane The stack-pane "button"
          */
@@ -319,7 +305,7 @@ public class BracketPane extends BorderPane {
                 return pane;
         }
 
-        public Pane createFinalFour(){
+        public Pane createFinalFour() {
                 Pane finalPane = new Pane();
                 BracketNode nodeFinal0 = new BracketNode("", 162, 300, 70, 0);
                 BracketNode nodeFinal1 = new BracketNode("", 75, 400, 70, 0);
@@ -390,7 +376,7 @@ public class BracketPane extends BorderPane {
                                 nodes.add(last);
                                 getChildren().addAll(new Line(iX, iY, iX + iXO, iY), last);
                                 last.setName(currentBracket.getBracket().get(location));
-                                bracketMap.put(last,location);
+                                bracketMap.put(last, location);
                                 nodeMap.put(location, last);
                         } else {
                                 ArrayList<BracketNode> aNodeList = new ArrayList<>();
@@ -417,7 +403,7 @@ public class BracketPane extends BorderPane {
                                         System.out.println(currentBracket.getBracket().get(tmpHelp.get(j)));
                                         aNodeList.get(j).setName(currentBracket.getBracket().get(tmpHelp.get(j)));
                                         bracketMap.put(aNodeList.get(j), tmpHelp.get(j));
-                                        nodeMap.put(tmpHelp.get(j),aNodeList.get(j));
+                                        nodeMap.put(tmpHelp.get(j), aNodeList.get(j));
                                         System.out.println(bracketMap.get(aNodeList.get(j)));
                                 }
                         }
@@ -425,7 +411,9 @@ public class BracketPane extends BorderPane {
                 }
         }
 
-        /** The BracketNode model for the Graphical display of the "Bracket" */
+        /**
+         * The BracketNode model for the Graphical display of the "Bracket"
+         */
         private class BracketNode extends Pane {
                 private String teamName;
                 private Rectangle rect;
@@ -433,6 +421,7 @@ public class BracketPane extends BorderPane {
 
                 /**
                  * Creates a BracketNode with,
+                 *
                  * @param teamName The name if any
                  * @param x        The starting x location
                  * @param y        The starting y location
