@@ -65,17 +65,22 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
 
     /**
      * Moves a team up the bracket
+     * updated by matt 5/7, now removesAbove anytime the above position is not equal to the clicked one
      * @param position, the starting position of the team to be moved
      */
 
     public void moveTeamUp(int position){
         int newPos = (int)((position-1)/2);
-        if (bracket.get(newPos).equals(""))
+        //if (bracket.get(newPos).equals("")) removed by matt 5/7
+        if(!bracket.get(position).equals(bracket.get(newPos))) {
+            //removeAbove(newPos);
             bracket.set(newPos, bracket.get(position));
+        }
+        /* removed by matt 5/7
         else {
             removeAbove(newPos);
             bracket.set(newPos, bracket.get(position));
-        }
+        }*/
     }
 
     /**
