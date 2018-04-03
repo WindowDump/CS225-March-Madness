@@ -1,5 +1,6 @@
-# CS225-March-Madness
-Final Project for CS225 Spring 2017
+# CS225-March-Madness: Bugs Team
+This is a fork of https://github.com/WindowDump/CS225-March-Madness for the purposes of bugfixing
+
 
 # Structure of Binary Tree Array
 Here are the actual concrete examples of what indecies in the array will map to what level and subtree of an overall tree. All of this applies to a single tree. Each bracket has its own tree, and every tree in the program will have the same structure.
