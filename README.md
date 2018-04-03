@@ -1,5 +1,5 @@
-# CS225-March-Madness: Bugs Team
-This is a fork of https://github.com/WindowDump/CS225-March-Madness for the purposes of bugfixing
+# CS225-March-Madness: Maintenance Project
+This is a fork of https://github.com/WindowDump/CS225-March-Madness for the purposes of bugfixing, improvements and adding features
 
 
 # Structure of Binary Tree Array
