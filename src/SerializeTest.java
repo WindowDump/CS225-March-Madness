@@ -45,6 +45,12 @@ public class SerializeTest
     array.add("Wyoming");
     
     Bracket hillary = new Bracket(array);
+    //added by Ana Gorohovschi
+    // this file generates a bracket with username set to null
+    //this interfers with the scoreboard by displaying a null username
+    //This bracket had a null username, to avoid this I gave it one
+   
+    hillary.setPlayerName("Hillary");
     
     FileOutputStream outStream = null;
     ObjectOutputStream out = null;

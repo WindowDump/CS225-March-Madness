@@ -355,8 +355,13 @@ public class MarchMadnessGUI extends Application {
             // the password user enter
             String playerPass = passwordField.getText();
 
-        
-          
+            //added by Ana Gorohovschi
+            //prevent execution of follow up code if username is null
+            if(name.length()==0)
+            {
+                infoAlert("Enter your username and password");
+                return;
+            }
             
             if (playerMap.get(name) != null) {
                 //check password of user
