@@ -290,15 +290,6 @@ public class MarchMadnessGUI extends Application {
             }catch(IOException e){
                 System.out.println("File not found");
             }
-            
-//            for(Bracket b : playerBrackets){
-//                if(selectedBracket.getPlayerName().equals(b.getPlayerName())){
-//                    playerBrackets.remove(b);
-//                }
-//                //System.out.println("Players name: " + b.getPlayerName());
-//            }
-            
-            //Right here we will send the user back to the login screen:)
         }
         return false;
     }
@@ -382,6 +373,9 @@ public class MarchMadnessGUI extends Application {
         finalizeButton.setOnAction(e->finalizeBracket());
         //Joe for account deletion
         deleteButton.setOnAction(e-> isDelete = deleteAccount());
+        if(isDelete){
+            login();
+        }
         back.setOnAction(e->{
             bracketPane=new BracketPane(selectedBracket);
             displayPane(bracketPane);
