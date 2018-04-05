@@ -270,8 +270,10 @@ public class MarchMadnessGUI extends Application {
     Finds the working directory of the application, *Will be adjusted for DrJava 
     then deletes the users account .ser file,
     then removes their bracket from the ArrayList.
+    It will also send the user to the login screen if they confirmed delete account
+    Alert box:)
     */
-    private boolean deleteAccount(){
+    private void deleteAccount(){
         if(confirmButton("Are you sure you want to delete your entire account?",
                 "March Madness account deleter")){
             System.out.println("Working Directory = " + System.getProperty("user.dir"));
@@ -283,15 +285,17 @@ public class MarchMadnessGUI extends Application {
 
             Path start = Paths.get(fileDir);
             
+            
             try{
                 Files.delete(start);
                 System.out.println("File is deleted!");
-                return true;
+                isDelete = true;
+                if(isDelete){login();}
             }catch(IOException e){
                 System.out.println("File not found");
             }
         }
-        return false;
+        isDelete = false;
     }
     
     private void finalizeBracket(){
@@ -310,7 +314,6 @@ public class MarchMadnessGUI extends Application {
             displayPane(bracketPane);
         
        }
-       //bracketPane=new BracketPane(selectedBracket);
     }
     
     
@@ -372,10 +375,7 @@ public class MarchMadnessGUI extends Application {
         resetButton.setOnAction(e->reset());
         finalizeButton.setOnAction(e->finalizeBracket());
         //Joe for account deletion
-        deleteButton.setOnAction(e-> isDelete = deleteAccount());
-        if(isDelete){
-            login();
-        }
+        deleteButton.setOnAction(e-> deleteAccount());
         back.setOnAction(e->{
             bracketPane=new BracketPane(selectedBracket);
             displayPane(bracketPane);
