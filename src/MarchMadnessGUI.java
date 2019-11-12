@@ -6,9 +6,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -42,7 +47,6 @@ import javafx.stage.Stage;
  */
 public class MarchMadnessGUI extends Application {
     
-    
     //all the gui ellements
     private BorderPane root;
     private ToolBar toolBar;
@@ -53,13 +57,15 @@ public class MarchMadnessGUI extends Application {
     private Button viewBracketButton;
     private Button clearButton;
     private Button resetButton;
+    //Joe added delete button
+    private Button deleteButton;
     private Button finalizeButton;
     
     //allows you to navigate back to division selection screen
     private Button back;
   
     
-    private  Bracket startingBracket;
+    private  Bracket startingBracket; 
     //reference to currently logged in bracket
     private Bracket selectedBracket;
     private Bracket simResultBracket;
@@ -69,31 +75,66 @@ public class MarchMadnessGUI extends Application {
     private HashMap<String, Bracket> playerMap;
 
     
-
     private ScoreBoardTable scoreBoard;
     private TableView table;
     private BracketPane bracketPane;
     private GridPane loginP;
     private TournamentInfo teamInfo;
     
+    private boolean isDelete;
+    
+    //Joe built constructor for main gui
+    public MarchMadnessGUI(){
+        root = new BorderPane();
+        toolBar = new ToolBar();
+        btoolBar = new ToolBar();
+        simulate = new Button();
+        login = new Button();
+        scoreBoardButton = new Button();
+        viewBracketButton = new Button();
+        clearButton = new Button();
+        resetButton = new Button();
+        deleteButton = new Button();
+        finalizeButton = new Button();
+        
+        back = new Button();
+        
+        startingBracket = null;
+        selectedBracket = null;
+        simResultBracket = null;
+        
+        playerBrackets = null;
+        playerMap = null;
+        
+        scoreBoard = null;
+        table = null;
+        bracketPane = null;
+        loginP = null;//Will send user to login pane once account has been deleted:)
+        teamInfo = null;
+        
+        isDelete = false;
+    }
     
     @Override
     public void start(Stage primaryStage) {
         //try to load all the files, if there is an error display it
         try{
             teamInfo=new TournamentInfo();
-            startingBracket= new Bracket(teamInfo.loadStartingBracket());
-            simResultBracket=new Bracket(teamInfo.loadStartingBracket());
+            startingBracket= new Bracket(TournamentInfo.loadStartingBracket());
+            simResultBracket=new Bracket(TournamentInfo.loadStartingBracket());
         } catch (IOException ex) {
             showError(new Exception("Can't find "+ex.getMessage(),ex),true);
         }
         //deserialize stored brackets
         playerBrackets = loadBrackets();
         
+        for(Bracket b : playerBrackets){
+            System.out.println("Player Name: " + b.getPlayerName());
+        }
+        
         playerMap = new HashMap<>();
         addAllToMap();
         
-
 
         //the main layout container
         root = new BorderPane();
@@ -114,6 +155,16 @@ public class MarchMadnessGUI extends Application {
         primaryStage.setTitle("March Madness Bracket Simulator");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        if(isDelete){
+            for(Bracket b : playerBrackets){
+                if(selectedBracket.getPlayerName().equals(b.getPlayerName())){
+                    playerBrackets.remove(b);
+                }
+                //System.out.println("Players name: " + b.getPlayerName());
+            }
+        }
+        
     }
 
     /**
@@ -122,8 +173,6 @@ public class MarchMadnessGUI extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
-    
     
     /**
      * simulates the tournament  
@@ -197,7 +246,6 @@ public class MarchMadnessGUI extends Application {
      */
     private void clear(){
       
-      
       bracketPane.clear();
       bracketPane=new BracketPane(selectedBracket);
       displayPane(bracketPane);
@@ -208,12 +256,46 @@ public class MarchMadnessGUI extends Application {
      * resets entire bracket
      */
     private void reset(){
-        if(confirmReset()){
+        if(confirmButton("Are you sure you want to reset the ENTIRE bracket?",
+                "March Madness Bracket Simulator")){
             //horrible hack to reset
             selectedBracket=new Bracket(startingBracket);
             bracketPane=new BracketPane(selectedBracket);
             displayPane(bracketPane);
         }
+    }
+    
+    //Joe for account deletion
+    /*
+    Finds the working directory of the application, *Will be adjusted for DrJava 
+    then deletes the users account .ser file,
+    then removes their bracket from the ArrayList.
+    It will also send the user to the login screen if they confirmed delete account
+    Alert box:)
+    */
+    private void deleteAccount(){
+        if(confirmButton("Are you sure you want to delete your entire account?",
+                "March Madness account deleter")){
+            System.out.println("Working Directory = " + System.getProperty("user.dir"));
+            String workingDir = System.getProperty("user.dir");
+            String fileDir = workingDir.substring(0, workingDir.indexOf("src"));
+            fileDir += selectedBracket.getPlayerName() + ".ser";
+            
+            System.out.println("Directory: " + fileDir);
+
+            Path start = Paths.get(fileDir);
+            
+            
+            try{
+                Files.delete(start);
+                System.out.println("File is deleted!");
+                isDelete = true;
+                if(isDelete){login();}
+            }catch(IOException e){
+                System.out.println("File not found");
+            }
+        }
+        isDelete = false;
     }
     
     private void finalizeBracket(){
@@ -232,10 +314,6 @@ public class MarchMadnessGUI extends Application {
             displayPane(bracketPane);
         
        }
-       //bracketPane=new BracketPane(selectedBracket);
-      
-      
-        
     }
     
     
@@ -264,6 +342,8 @@ public class MarchMadnessGUI extends Application {
         clearButton=new Button("Clear");
         resetButton=new Button("Reset");
         finalizeButton=new Button("Finalize");
+        //Joe for delete button
+        deleteButton = new Button("Delete Account");
         toolBar.getItems().addAll(
                 createSpacer(),
                 login,
@@ -277,6 +357,7 @@ public class MarchMadnessGUI extends Application {
                 clearButton,
                 resetButton,
                 finalizeButton,
+                deleteButton,//Joe adds delete button to bottom tool bar(may or may not still be here:))
                 back=new Button("Choose Division"),
                 createSpacer()
         );
@@ -293,6 +374,8 @@ public class MarchMadnessGUI extends Application {
         clearButton.setOnAction(e->clear());
         resetButton.setOnAction(e->reset());
         finalizeButton.setOnAction(e->finalizeBracket());
+        //Joe for account deletion
+        deleteButton.setOnAction(e-> deleteAccount());
         back.setOnAction(e->{
             bracketPane=new BracketPane(selectedBracket);
             displayPane(bracketPane);
@@ -407,7 +490,8 @@ public class MarchMadnessGUI extends Application {
      * The Exception handler
      * Displays a error message to the user
      * and if the error is bad enough closes the program
-     * @param fatal true if the program should exit. false otherwise
+     * @param msg message to be displayed to the user
+     * @param fatal true if the program should exit. false otherwise 
      */
     private void showError(Exception e,boolean fatal){
         String msg=e.getMessage();
@@ -443,16 +527,25 @@ public class MarchMadnessGUI extends Application {
      * to clear all predictions from their bracket
      * @return true if the yes button clicked, false otherwise
      */
-    private boolean confirmReset(){
+    
+    /*
+    Joe deleted confirmReset method, merged with confirmDelete to create universal method:)
+    */
+    //Joe for delete button(will later merge confirmReset and confirmDelete to a single method:))
+    //Joe Deleted confirmDelete(no longer needed merged two methods:))
+    /*
+    Joe created to merge confirmDelete and confirmReset methods
+    - Takes a String for a message, and another string for title of alert
+    */
+    private boolean confirmButton(String mes, String t){
         Alert alert = new Alert(AlertType.CONFIRMATION, 
-                "Are you sure you want to reset the ENTIRE bracket?", 
+                mes, 
                 ButtonType.YES,  ButtonType.CANCEL);
-        alert.setTitle("March Madness Bracket Simulator");
+        alert.setTitle(t);
         alert.setHeaderText(null);
         alert.showAndWait();
         return alert.getResult()==ButtonType.YES;
     }
-    
     
     /**
      * Tayon Watson 5/5
@@ -474,6 +567,7 @@ public class MarchMadnessGUI extends Application {
       // Grant osborn 5/6 hopefully this never happens 
       showError(new Exception("Error saving bracket \n"+e.getMessage(),e),false);
     }
+        
     }
     /**
      * Tayon Watson 5/5
@@ -501,7 +595,8 @@ public class MarchMadnessGUI extends Application {
       /**
      * Tayon Watson 5/5
      * deseralizedBracket
-     * @return deserialized bracket
+     * @param filename of the seralized bracket file
+     * @return deserialized bracket 
      */
     private ArrayList<Bracket> loadBrackets()
     {   
@@ -510,7 +605,7 @@ public class MarchMadnessGUI extends Application {
         for (final File fileEntry : dir.listFiles()){
             String fileName = fileEntry.getName();
             String extension = fileName.substring(fileName.lastIndexOf(".")+1);
-       
+            
             if (extension.equals("ser")){
                 list.add(deseralizeBracket(fileName));
             }

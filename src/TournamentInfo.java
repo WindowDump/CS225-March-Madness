@@ -1,8 +1,9 @@
-import java.io.*;
-import java.net.URL;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
+//Joe deleted unneccesary import statement
 
 
 /**
@@ -10,9 +11,11 @@ import java.util.concurrent.ExecutionException;
  */
 public class TournamentInfo{//renamed from teamInfo by matt 5/4
     HashMap<String, Team> teams;
+    static ArrayList<Integer> ranks;//Joe Added static ArrayList ranks to add to team names:)
 
     public TournamentInfo() throws IOException{
         teams = new HashMap<>();
+        ranks = new ArrayList<>();//Joe initializing the static ranks ArrayList to default constructor:) 
         loadFromFile();
     }
 
@@ -32,8 +35,7 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
 
 
         try{
-            InputStream u = getClass().getResourceAsStream("teamInfo.txt");
-            BufferedReader br = new BufferedReader(new InputStreamReader(u));
+            BufferedReader br = new BufferedReader(new FileReader("teamInfo.txt"));
 
             while((name = br.readLine()) != null){
             	nickname = br.readLine();
@@ -41,6 +43,9 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
                 ranking = Integer.parseInt(br.readLine());
                 offensivePPG = Double.parseDouble(br.readLine());
                 defensivePPG = Double.parseDouble(br.readLine());
+                
+                
+                ranks.add(ranking);//Joe Adding each ranking to the static ArrayList 
                 
                 Team newTeam = new Team(name, nickname, info, ranking, offensivePPG, defensivePPG); //creates team with info
 
@@ -105,24 +110,23 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
 
     }
 
-
-
     /**
      * reads Strings from initialMatches.txt into an ArrayList in order to construct the starting bracket
      * @authors Matt, Artem
      * @return ArrayList of Strings
      */
-    public ArrayList<String> loadStartingBracket() throws IOException{
+    public static ArrayList<String> loadStartingBracket() throws IOException{
         String name;
+        int count = 0;//Joe counting the index for each rank
         ArrayList<String> starting = new ArrayList<String>();
 
 
         try{
-            InputStream u = getClass().getResourceAsStream("initialMatches.txt");
-            BufferedReader br = new BufferedReader(new InputStreamReader(u));
-
+            BufferedReader br = new BufferedReader(new FileReader("initialMatches.txt"));
+            
             while((name = br.readLine()) != null){
-                starting.add(name);
+                starting.add(name + ranks.get(count));//Joe Adding the ranking to each of the team names:)
+                count++;
             }
             
             br.close();
