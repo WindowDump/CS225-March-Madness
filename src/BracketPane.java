@@ -37,7 +37,7 @@ public class BracketPane extends BorderPane {
         /**
          * Used to initiate the paint of the bracket nodes
          */
-        private static boolean isTop = true;
+        private static boolean isTop = true; // HIGHLIGHT: Does nothing
         /**
          * Maps the text "buttons" to it's respective grid-pane
          */
@@ -404,7 +404,7 @@ public class BracketPane extends BorderPane {
                                         Line bottom = new Line(bl.getX(), bl.getY(), br.getX(), br.getY());
                                         Line right = new Line(tr.getX(), tr.getY(), br.getX(), br.getY());
                                         getChildren().addAll(top, bottom, right, nTop, nBottom);
-                                        isTop = !isTop;
+                                        isTop = !isTop; // HIGHLIGHT: Only usage of isTop
                                         y += increment;
                                 }
                                 ArrayList<Integer> tmpHelp = helper(location, num);
