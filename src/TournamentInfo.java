@@ -119,19 +119,17 @@ public class TournamentInfo {//renamed from teamInfo by matt 5/4
         String name;
         ArrayList<String> starting = new ArrayList<String>();
 
-
-        try {
-            InputStream u = getClass().getResourceAsStream("initialMatches.txt");
-            BufferedReader br = new BufferedReader(new InputStreamReader(u));
-
-            while ((name = br.readLine()) != null) {
-                starting.add(name);
-            }
-
-            br.close();
-        } catch (IOException ioe) {
-            throw ioe;
+        InputStream u = getClass().getResourceAsStream("initialMatches.txt");
+        if (u == null) {
+            throw new IOException("initialMatches.txt not found");
         }
+        BufferedReader br = new BufferedReader(new InputStreamReader(u));
+
+        while ((name = br.readLine()) != null) {
+            starting.add(name);
+        }
+
+        br.close();
         return starting;
 
     }

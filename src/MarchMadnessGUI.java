@@ -85,7 +85,7 @@ public class MarchMadnessGUI extends Application {
             startingBracket= new Bracket(teamInfo.loadStartingBracket());
             simResultBracket=new Bracket(teamInfo.loadStartingBracket());
         } catch (IOException ex) {
-            showError(new Exception("Can't find "+ex.getMessage(),ex),true);
+            showError(new Exception(ex.getMessage(),ex),true);
         }
         //deserialize stored brackets
         playerBrackets = loadBrackets();
