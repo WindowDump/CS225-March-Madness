@@ -30,7 +30,7 @@ public class Bracket implements Serializable
      * @param starting master bracket pre-simulation
      */
     public Bracket(Bracket starting) {
-        bracket = new ArrayList<String>(starting.getBracket());
+        bracket = new ArrayList<>(starting.getBracket());
     }
 
     /**
@@ -115,7 +115,7 @@ public class Bracket implements Serializable
         bracket.add(position, s);
     }
 
-    /** 
+    /**
      * Hillary Ssemakula:
      * set player's password to string parameter 
      * @param password a String
