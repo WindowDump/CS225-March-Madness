@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class Bracket implements Serializable
 {
     private final ArrayList<String> bracket;
-    private final transient int[] teamScores = new int[127];
+    private final transient int[] teamScores = new int[Byte.MAX_VALUE];
     private String playerName;
     private String password;
     public static final long serialVersionUID = 5609181678399742983L;
