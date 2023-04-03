@@ -20,7 +20,7 @@ public class Bracket implements Serializable
      */
     public Bracket(ArrayList<String> starting){
         bracket = new ArrayList<>(starting);
-        while (bracket.size() < 127) { // TODO: 4/2/2023 Replace magic number with constant
+        while (bracket.size() < Byte.MAX_VALUE) {
             bracket.add(0,""); // FIXME: 4/2/2023 Adding empty strings may unnecessary
         }
     }
