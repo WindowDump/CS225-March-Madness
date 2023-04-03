@@ -189,6 +189,12 @@ public class Bracket implements Serializable
      * @param game, index of the place that will be scored
      * @param score, the amount of points that the team scores
      */
+    /* TODO: 4/3/2023
+    *   Figure out what to do with this method.
+    *   Right now it's not being used for anything since nothing is getting
+    *   contents from it. This doesn't mean that it won't be useful in the
+    *   future because the game simulation may change, utilizing this method.
+    *   I'll leave it here until things are more finalized. */
     public void setTeamScore(int game, int score){
         teamScores[game] = score;
     }
