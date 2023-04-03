@@ -229,14 +229,4 @@ d    *update by matt and hillary 5/2 */
     public void setTeamScore(int game, int score){
         teamScores[game] = score;
     }
-
-    /**
-     * added by matt 5/3
-     * gets the score at a particular index
-     * @param index, the place in the bracket that you retrieve the score from
-     * @return the score at that index
-     */
-    public int getTeamScore(int index){
-        return teamScores[index];
-    } // TODO: 4/2/2023 Unused method. Maybe remove it.
 }
