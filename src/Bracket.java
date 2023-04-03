@@ -106,16 +106,6 @@ public class Bracket implements Serializable
     }
 
     /**
-     * add a value to the bracket arrayList
-     * used for creating new brackets
-     * @param position index to add new value
-     * @param s string added to bracket
-     */
-    private void add(int position, String s){ // TODO: 4/2/2023 Unused method. Maybe remove it.
-        bracket.add(position, s);
-    }
-
-    /**
      * Hillary Ssemakula:
      * set player's password to string parameter 
      * @param password a String
@@ -160,25 +150,6 @@ public class Bracket implements Serializable
           return true;
       }
 
-    // TODO: 4/2/2023 Return value in doc should tell more
-    /** 
-      * Hillary:
-      * returns true or false depending on whether there are any empty slots in the bracket from a given point all the way to the starting 64 teams.
-      * If the root itself is empty return false. otherwise the method is recursively applied to the left and right subtrees of the root.
-      * @param root the int index of the root
-      * @return boolean
-d    *update by matt and hillary 5/2 */
-    public boolean isSubtreeComplete(int root)
-    {
-        if(bracket.get(root).equals(""))
-            return false;
-        int rightChild = 2 * root + 2;
-        int leftChild = 2 * root + 1;
-        if(leftChild< bracket.size() && rightChild<bracket.size())
-            return isSubtreeComplete(leftChild) && isSubtreeComplete(rightChild);
-        return true;
-    }
-
     /**
      * Matt 5/2
      * Scores the bracket by assigning points of each correct winner
@@ -212,14 +183,6 @@ d    *update by matt and hillary 5/2 */
         return score;
     }
 
-    /**
-     * added by matt 5/2
-     * sets the playerName for the bracket
-     * @param user name of the player
-     */
-    public void setPlayerName(String user){
-        playerName = user;
-    }
     /**
      * added by dan and matt 5/3
      * Set teamScore for a game
