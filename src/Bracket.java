@@ -92,7 +92,6 @@ public class Bracket implements Serializable
      * removes all future wins of a team, including spot that this is called from
      * @param child index of the first place that the team gets deselected
      */
-    //public void resetSubtree(int root){
     public void removeAbove(int child) {//renamed by matt 5/1
         if (child == 0)
             bracket.set(child, "");
