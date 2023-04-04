@@ -1,11 +1,7 @@
 //package marchmadness;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.security.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -31,6 +27,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import javax.crypto.Cipher;
+
 
 /**
  *  MarchMadnessGUI
@@ -75,6 +74,7 @@ public class MarchMadnessGUI extends Application {
     private BracketPane bracketPane;
     private GridPane loginP;
     private TournamentInfo teamInfo;
+
     
     
     @Override
@@ -365,12 +365,17 @@ public class MarchMadnessGUI extends Application {
                
                 String password1 = tmpBracket.getPassword();
 
-                if (Objects.equals(password1, playerPass)) {
-                    // load bracket
-                    selectedBracket=playerMap.get(name);
-                    chooseBracket();
-                }else{
-                   infoAlert("The password you have entered is incorrect!");
+
+                try {
+                    if (Objects.equals(password1, hashText(playerPass))) {  // added hashing for passwords
+                        // load bracket
+                        selectedBracket=playerMap.get(name);
+                        chooseBracket();
+                    }else{
+                       infoAlert("The password you have entered is incorrect!");
+                    }
+                } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
                 }
 
             } else {
@@ -379,7 +384,11 @@ public class MarchMadnessGUI extends Application {
                     //create new bracket
                     Bracket tmpPlayerBracket = new Bracket(startingBracket, name);
                     playerBrackets.add(tmpPlayerBracket);
-                    tmpPlayerBracket.setPassword(playerPass);
+                    try {
+                        tmpPlayerBracket.setPassword(hashText(playerPass));  //more hashing for passwords
+                    } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    }
 
                     playerMap.put(name, tmpPlayerBracket);
                     selectedBracket = tmpPlayerBracket;
@@ -516,6 +525,22 @@ public class MarchMadnessGUI extends Application {
             }
         }
         return list;
+    }
+
+    /**
+     * Katherine Foley 4/4/2023
+     * function for hashing plaintext password for storage
+     * @param text
+     * @return
+     * @throws Exception
+     */
+    private String hashText(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        byte[] hashBytes;
+        String hashString;
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        hashBytes = md.digest(text.getBytes());
+        hashString = new String(hashBytes, "UTF-8");
+        return hashString;
     }
        
 }
