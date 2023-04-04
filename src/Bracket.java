@@ -2,7 +2,10 @@ import java.util.ArrayList;
 import java.io.Serializable; 
 
 /**
- * Bracket Class
+ * Class representing a sports bracket like those in March Madness.
+ * A bracket contains a list of strings (64 in total) representing participating teams.
+ * Each bracket is linked with its own user account.
+ *
  * @author Matt, Dan, Hillary
  * @since 5/1/2017
  */
