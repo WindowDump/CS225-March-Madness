@@ -1,9 +1,9 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -25,36 +25,44 @@ public class TournamentInfo {//renamed from teamInfo by matt 5/4
      */
     private void loadFromFile() throws IOException {
 
+        FileInputStream inFS = null; //added KF
+        Scanner scnr;
         String name;
         String nickname;
         String info;
         int ranking;
         double offensivePPG;
         double defensivePPG;
+        Team newTeam;
 
+        try{
+            //InputStream u = getClass().getResourceAsStream("teamInfo.txt");
+            inFS = new FileInputStream("teamInfo.txt"); // added by KF
+            //BufferedReader br = new BufferedReader(new InputStreamReader(u));
+            scnr = new Scanner(inFS);
+            //while((name = br.readLine()) != null){
+            while (scnr.hasNextLine()) {
 
-        try {
-            InputStream u = getClass().getResourceAsStream("teamInfo.txt");
-            BufferedReader br = new BufferedReader(new InputStreamReader(u));
+                name = scnr.nextLine();
+                nickname = scnr.nextLine();
+                info = scnr.nextLine();
+                ranking = Integer.parseInt(scnr.nextLine());
+                offensivePPG = Double.parseDouble(scnr.nextLine());
+                defensivePPG = Double.parseDouble(scnr.nextLine());
 
-            while ((name = br.readLine()) != null) {
-                nickname = br.readLine();
-                info = br.readLine();
-                ranking = Integer.parseInt(br.readLine());
-                offensivePPG = Double.parseDouble(br.readLine());
-                defensivePPG = Double.parseDouble(br.readLine());
-
-                Team newTeam = new Team(name, nickname, info, ranking, offensivePPG, defensivePPG); //creates team with info
-
-                br.readLine();   //gets rid of empty line between team infos
+                newTeam = new Team(name, nickname, info, ranking, offensivePPG, defensivePPG); //creates team with info
 
                 teams.put(newTeam.getName(), newTeam);   //map team name with respective team object
+
+
+                scnr.nextLine();   //gets rid of empty line between team infos
+
             }
-
-            br.close();
-
-        } catch (IOException ioe) {
-            throw ioe;
+        } catch (NoSuchElementException ignored) {
+        } finally {
+            if (inFS != null) {
+                inFS.close();
+            }
         }
     }
 
@@ -107,6 +115,7 @@ public class TournamentInfo {//renamed from teamInfo by matt 5/4
         }
 
     }
+
 
 
     /**
