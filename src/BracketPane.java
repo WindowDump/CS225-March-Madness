@@ -18,83 +18,115 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 import javafx.scene.layout.Region;
 
-/*
-  Created by Richard and Ricardo on 5/3/17.
- */
-
 /**
- * It defines a custom class BracketPane that extends BorderPane, which is a layout class in JavaFX.
- * The BracketPane class is used for displaying and managing a sports tournament bracket,for the
- * March Madness-style basketball tournament.
+
+ The BracketPane class represents a pane that displays a tournament bracket structure.
+
+ It allows users to interact with the bracket, including simulating matches and displaying team information.
+
+ The BracketPane is responsible for initializing the bracket, handling user interactions, and updating the bracket.
+
+ The class is designed to work in conjunction with the Bracket, Team, and TournamentInfo classes.
+
+ Created by Richard and Ricardo on 5/3/17. Updated by Dorin Tihon 04/04/2023.
  */
 public class BracketPane extends BorderPane {
 
-        // Reference to the graphical representation of the nodes within the bracket.
+        /**
+         * Reference to the graphical representation of the nodes within the bracket.
+         */
         private static ArrayList<BracketNode> nodes;
-
-        // Reference to the current bracket./
+        /**
+         * Used to initiate the paint of the bracket nodes
+         */
+        private static boolean isTop = true;
+        /**
+         * Maps the text "buttons" to it's respective grid-pane
+         */
+        private HashMap<StackPane, Pane> panes;
+        /**
+         * Reference to the current bracket.
+         */
         private Bracket currentBracket;
-
-        // Maps the text "buttons" to its respective grid-pane
-        private final HashMap<StackPane, Pane> panes;
-
-
-        // Reference to active subtree within current bracket.
+        /**
+         * Reference to active subtree within current bracket.
+         */
         private int displayedSubtree;
 
-        // Important logical simplification for allowing for code that is easier to maintain.
-        // Maps BracketNode to its Integer position in the tree.
+        /**
+         * Important logical simplification for allowing for code that is easier
+         * to maintain.
+         */
         private HashMap<BracketNode, Integer> bracketMap;
-
-        // Reverse of the above. Maps Integer position in the tree to its BracketNode.
+        /**
+         * Reverse of the above;
+         */
         private HashMap<Integer, BracketNode> nodeMap;
 
-        // GridPane to display center content
         private GridPane center;
-
-        // GridPane to display the full bracket view
         private GridPane fullPane;
 
 
-        //Default constructor
+        /**
+         * Default constructor for the BracketPane class.
+         */
         public BracketPane() {
-                currentBracket = null;
+                // Initialize instance variables with default values
                 nodes = new ArrayList<>();
                 panes = new HashMap<>();
-                displayedSubtree = 0;
                 bracketMap = new HashMap<>();
                 nodeMap = new HashMap<>();
-                createCenterGridPane();
-                createButtonGridPane();
-                setButtonActions();
-
-        }
-
-
-        //Parameter constructor
-        public BracketPane(Bracket currentBracket) {
-                this.currentBracket = currentBracket;
                 displayedSubtree = 0;
+
+                // Create an empty Bracket instance for currentBracket
+                this.currentBracket = null;
+
+                // Initialize other instance variables as needed
+                center = new GridPane();
+                fullPane = new GridPane();
+        }
+        /**
+         * Initializes the properties needed to construct a bracket.
+         * The constructor takes a Bracket object to display and interact with.
+         * @param currentBracket the bracket to display and interact with
+         */
+        public BracketPane(Bracket currentBracket) {
+                displayedSubtree=0;
+                this.currentBracket = currentBracket;
+
                 bracketMap = new HashMap<>();
                 nodeMap = new HashMap<>();
                 panes = new HashMap<>();
                 nodes = new ArrayList<>();
                 center = new GridPane();
-                createCenterGridPane();
-                createButtonGridPane();
-                setButtonActions();
+
+                ArrayList<StackPane> buttons = createButtons();
+                ArrayList<BracketTree> roots = createRoots(buttons);
+                Pane finalPane = createFinalFour();
+                fullPane = createFullPane(roots, finalPane);
+
+                GridPane buttonGrid = initButtonGrid(buttons);
+
+                panes.put(buttons.get((buttons.size() - 1)), fullPane);
+                finalPane.toBack();
+
+                // set default center to the button grid
+                this.setCenter(buttonGrid);
+                addEventListeners(buttons);
+
         }
 
-
-        // Clears the entries of a team future wins
+        /**
+         * Clears the entries of a team future wins
+         * @param treeNum the tree number to start clearing from
+         */
         private void clearAbove(int treeNum) {
                 int nextTreeNum = (treeNum - 1) / 2;
                 if (!nodeMap.get(nextTreeNum).getName().isEmpty()) {
@@ -103,13 +135,17 @@ public class BracketPane extends BorderPane {
                 }
         }
 
-        // Clear the current displayed subtree
+        /**
+         * Clears the current subtree from the displayed subtree.
+         */
         public void clear(){
                 clearSubtree(displayedSubtree);
         }
 
-        // Handles clicked events for BracketNode objects
-        public EventHandler<MouseEvent> clicked = mouseEvent -> {
+        /**
+         * Handles clicked events for BracketNode objects
+         */
+        private EventHandler<MouseEvent> clicked = mouseEvent -> {
                 //conditional added by matt 5/7 to differentiate between left and right mouse click
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                         BracketNode n = (BracketNode) mouseEvent.getSource();
@@ -122,7 +158,7 @@ public class BracketPane extends BorderPane {
                                 currentBracket.moveTeamUp(treeNum);
                         }
                 }
-                //added by matt 5/7, shows the teams info if you right-click
+                //added by matt 5/7, shows the teams info if you right click
                 else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
                         String text = "";
                         BracketNode n = (BracketNode) mouseEvent.getSource();
@@ -131,9 +167,9 @@ public class BracketPane extends BorderPane {
                         try {
                                 TournamentInfo info = new TournamentInfo();
                                 Team t = info.getTeam(teamName);
-                                //by Tyler - added the last two pieces of info to the pop-up window
+                                //by Tyler - added the last two pieces of info to the pop up window
                                 text += "Team: " + teamName + " | Ranking: " + t.getRanking() + "\nMascot: " + t.getNickname() + "\nInfo: " + t.getInfo() + "\nAverage Offensive PPG: " + t.getOffensePPG() + "\nAverage Defensive PPG: "+ t.getDefensePPG();
-                        } catch (IOException e) {//if for some reason TournamentInfo isn't working, it will display info not found
+                        } catch (IOException e) {//if for some reason TournamentInfo isnt working, it will display info not found
                                 text += "Info for " + teamName + "not found";
                         }
                         //create a popup with the team info
@@ -145,107 +181,47 @@ public class BracketPane extends BorderPane {
                 }
         };
 
-
-        // Handles mouseEntered events for BracketNode objects
-        public final EventHandler<MouseEvent> enter = mouseEvent -> {
+        /**
+         * Handles mouseEntered events for BracketNode objects
+         */
+        private EventHandler<MouseEvent> enter = mouseEvent -> {
                 BracketNode tmp = (BracketNode) mouseEvent.getSource();
-                tmp.setStyle("-fx-background-color: lightcyan;");
-                tmp.setEffect(new InnerShadow(10, Color.LIGHTCYAN));
+                tmp.setEffect(new InnerShadow(10, Color.DARKBLUE));
         };
 
-        // Handles mouseExited events for BracketNode objects
-        public final EventHandler<MouseEvent> exit = mouseEvent -> {
+        /**
+         * Handles mouseExited events for BracketNode objects
+         */
+        private EventHandler<MouseEvent> exit = mouseEvent -> {
                 BracketNode tmp = (BracketNode) mouseEvent.getSource();
                 tmp.setStyle(null);
                 tmp.setEffect(null);
 
         };
 
-
+        /**
+         * Gets the full pane containing the entire bracket.
+         *
+         * @return fullPane, a GridPane that contains the entire bracket.
+         */
         public GridPane getFullPane() {
                 return fullPane;
         }
 
-        private ArrayList<StackPane> createButtons() {
-                ArrayList<StackPane> buttons = new ArrayList<>();
-                buttons.add(customButton("East"));
-                buttons.add(customButton("WEST"));
-                buttons.add(customButton("MIDWEST"));
-                buttons.add(customButton("SOUTH"));
-                buttons.add(customButton("FULL"));
-                return buttons;
-        }
-
-
-        // Creates the center grid pane that holds the bracket nodes.
-        private void createCenterGridPane() {
-                ArrayList<Root> roots = new ArrayList<>();
-                ArrayList<StackPane> buttons = createButtons();
-
-                for (int i = 0; i < buttons.size() - 1; i++) {
-                        roots.add(new Root(3 + i));
-                        panes.put(buttons.get(i), roots.get(i));
-                }
-
-                Pane finalPane = createFinalFour();
-                GridPane fullPane = createFullPane(roots, finalPane);
-                panes.put(buttons.get(buttons.size() - 1), fullPane);
-                finalPane.toBack();
-        }
-
-        // Creates a GridPane that consists of three smaller GridPanes and a final pane.
-        private GridPane createFullPane(ArrayList<Root> roots, Pane finalPane) {
-
-                // Create the main GridPane to hold the smaller GridPanes and the final pane
-                GridPane fullPane = new GridPane();
-
-                // Create the first smaller GridPane and add the first two roots to it
-                GridPane gp1 = new GridPane();
-                gp1.add(roots.get(0), 0, 0);
-                gp1.add(roots.get(1), 0, 1);
-
-                // Create the second smaller GridPane and add the last two roots to it
-                GridPane gp2 = new GridPane();
-                gp2.add(roots.get(2), 0, 0);
-                gp2.add(roots.get(3), 0, 1);
-
-                // Set the node orientation of the second smaller GridPane to right-to-left
-                gp2.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-
-                // Add the smaller GridPanes and the final pane to the main GridPane
-                fullPane.add(gp1, 0, 0);
-                fullPane.add(finalPane, 1, 0, 1, 2);
-                fullPane.add(gp2, 2, 0);
-
-                // Set the alignment of the main GridPane to center
-                fullPane.setAlignment(Pos.CENTER);
-
-                // Return the main GridPane
-                return fullPane;
-        }
-
-
-        // Creates the button grid pane that holds the navigation buttons.
-        private void createButtonGridPane() {
-                ArrayList<StackPane> buttons = createButtons();
-                GridPane buttonGrid = new GridPane();
-                for (int i = 0; i < buttons.size(); i++) {
-                        buttonGrid.add(buttons.get(i), 0, i);
-                }
-                buttonGrid.setAlignment(Pos.CENTER);
-                this.setCenter(buttonGrid);
-        }
-
-        // Sets the actions for the navigation buttons.
-        private void setButtonActions() {
-                ArrayList<StackPane> buttons = createButtons();
+        /**
+         * Adds event listeners to the given StackPane buttons.
+         * These event listeners handle mouse entered, mouse exited, and mouse clicked events.
+         *
+         * @param buttons The list of StackPane buttons to add event listeners to.
+         */
+        private void addEventListeners(ArrayList<StackPane> buttons) {
                 for (StackPane t : buttons) {
                         t.setOnMouseEntered(mouseEvent -> {
-                                t.setStyle("-fx-background-color: lightblue;");
-                                t.setEffect(new InnerShadow(10, Color.LIGHTCYAN));
+
+                                t.setEffect(new InnerShadow(10, Color.GREENYELLOW));
                         });
                         t.setOnMouseExited(mouseEvent -> {
-                                t.setStyle("-fx-background-color: orange;");
+
                                 t.setEffect(null);
                         });
                         t.setOnMouseClicked(mouseEvent -> {
@@ -253,9 +229,53 @@ public class BracketPane extends BorderPane {
                                 center.add(new ScrollPane(panes.get(t)), 0, 0);
                                 center.setAlignment(Pos.CENTER);
                                 setCenter(center);
-                                displayedSubtree = buttons.indexOf(t) == 7 ? 0 : buttons.indexOf(t) + 3;
                         });
                 }
+        }
+
+        private GridPane initButtonGrid(ArrayList<StackPane> buttons) {
+                GridPane buttonGrid = new GridPane();
+                for (int i = 0; i < buttons.size(); i++)
+                        buttonGrid.add(buttons.get(i), 0, i);
+                buttonGrid.setAlignment(Pos.CENTER);
+
+                return buttonGrid;
+        }
+
+        private GridPane createFullPane(ArrayList<BracketTree> roots, Pane finalPane) {
+                GridPane fullPane = new GridPane();
+                GridPane gp1 = new GridPane();
+                gp1.add(roots.get(0), 0, 0);
+                gp1.add(roots.get(1), 0, 1);
+                GridPane gp2 = new GridPane();
+                gp2.add(roots.get(2), 0, 0);
+                gp2.add(roots.get(3), 0, 1);
+                gp2.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+                fullPane.add(gp1, 0, 0);
+                fullPane.add(finalPane, 1, 0, 1, 2);
+                fullPane.add(gp2, 2, 0);
+                fullPane.setAlignment(Pos.CENTER);
+
+                return fullPane;
+        }
+
+        public ArrayList<BracketTree> createRoots(ArrayList<StackPane> buttons){
+                ArrayList<BracketTree> roots = new ArrayList<>();
+                for (int m = 0; m < buttons.size() - 1; m++) {
+                        roots.add(new BracketTree(3 + m));
+                        panes.put(buttons.get(m), roots.get(m));
+                }
+                return roots;
+        }
+
+        public ArrayList<StackPane> createButtons(){
+                ArrayList<StackPane> buttons = new ArrayList<>();
+                buttons.add(customButton("EAST"));
+                buttons.add(customButton("WEST"));
+                buttons.add(customButton("MIDWEST"));
+                buttons.add(customButton("SOUTH"));
+                buttons.add(customButton("FULL"));
+                return buttons;
         }
 
         /**
@@ -265,7 +285,7 @@ public class BracketPane extends BorderPane {
          * @param pos  the position in the tree (8 (16) , 4 (8) , 2 (4) , 1 (2))
          * @return The list representing the valid values.
          */
-        public static ArrayList<Integer> helper(int root, int pos) {
+        public ArrayList<Integer> helper(int root, int pos) {
                 ArrayList<Integer> positions = new ArrayList<>();
                 int base = 0;
                 int tmp = (root * 2) + 1;
@@ -279,7 +299,6 @@ public class BracketPane extends BorderPane {
 
         /**
          * Sets the current bracket to,
-         *
          * @param target The bracket to replace currentBracket
          */
         public void setBracket(Bracket target) {
@@ -288,159 +307,162 @@ public class BracketPane extends BorderPane {
 
         /**
          * Clears the sub tree from,
-         *
          * @param position The position to clear after
          */
         public void clearSubtree(int position) {
                 currentBracket.resetSubtree(position);
         }
 
+
         /**
          * Requests a message from current bracket to tell if the bracket
          * has been completed.
-         *
          * @return True if completed, false otherwise.
          */
         public boolean isComplete() {
                 return currentBracket.isComplete();
         }
 
-
         /**
          * Returns a custom "Button" with specified
-         *
          * @param name The name of the button
          * @return pane The stack-pane "button"
          */
         private StackPane customButton(String name) {
+
                 StackPane pane = new StackPane();
                 Rectangle r = new Rectangle(100, 50, Color.TRANSPARENT);
                 Text t = new Text(name);
                 t.setTextAlignment(TextAlignment.CENTER);
                 pane.getChildren().addAll(r, t);
-                pane.setStyle("-fx-background-color: orange;");
                 return pane;
         }
 
         public Pane createFinalFour() {
                 Pane finalPane = new Pane();
-                createFinalNodes(finalPane);
-                setNodeStyles();
+
+                BracketNode nodeFinal0 = initializeBracketNode(162, 300, 0);
+                BracketNode nodeFinal1 = initializeBracketNode(75, 400, 1);
+                BracketNode nodeFinal2 = initializeBracketNode(250, 400, 2);
+
+                finalPane.getChildren().addAll(nodeFinal0, nodeFinal1, nodeFinal2);
                 finalPane.setMinWidth(400.0);
+
                 return finalPane;
         }
 
-        private void createFinalNodes(Pane finalPane) {
-                BracketNode nodeFinal0 = createBracketNode("", 162, 300, 70, 0);
-                BracketNode nodeFinal1 = createBracketNode("", 75, 400, 70, 0);
-                BracketNode nodeFinal2 = createBracketNode("", 250, 400, 70, 0);
-                nodeFinal0.setName(currentBracket.getBracket().get(0));
-                nodeFinal1.setName(currentBracket.getBracket().get(1));
-                nodeFinal2.setName(currentBracket.getBracket().get(2));
-                addNodesToPane(finalPane, nodeFinal0, nodeFinal1, nodeFinal2);
-        }
+        private BracketNode initializeBracketNode(int x, int y, int index) {
+                BracketNode node = new BracketNode(currentBracket.getBracket().get(index), x, y, 70, 0);
 
-        private BracketNode createBracketNode(String teamName, int x, int y, int rX, int rY) {
-                BracketNode node = new BracketNode(teamName, x, y, rX, rY);
                 node.setOnMouseClicked(clicked);
                 node.setOnMouseDragEntered(enter);
                 node.setOnMouseDragExited(exit);
+                node.setStyle("-fx-border-color: red");
+
+                bracketMap.put(node, index);
+                nodeMap.put(index, node);
+
                 return node;
         }
-
-        private void addNodesToPane(Pane pane, BracketNode... nodes) {
-                for (BracketNode node : nodes) {
-                        pane.getChildren().add(node);
-                        bracketMap.put(node, nodeMap.size());
-                        nodeMap.put(nodeMap.size(), node);
-                }
-        }
-
-        private void setNodeStyles() {
-                for (BracketNode node : nodeMap.values()) {
-                        node.setStyle("-fx-border-color: darkblue");
-                }
-        }
-
         /**
          * Creates the graphical representation of a subtree.
          */
-        private class Root extends Pane {
-                private final int location;
+        private class BracketTree extends Pane {
 
-                public Root(int location) {
+                private int location;
+
+                public BracketTree(int location) {
                         this.location = location;
-                        createNodePairs(420, 200, 100, 20, 0, 0);
-                        createNodePairs(320, 119, 100, 200, 1, 0);
-                        createNodePairs(220, 60, 100, 100, 2, 200);
-                        createNodePairs(120, 35, 100, 50, 4, 100);
-                        createNodePairs(20, 25, 100, 25, 8, 50);
-                }
-
-                private void createSingleNode(int iX, int iY, int iXO, int y) {
-                        BracketNode last = new BracketNode("", iX, y - 20, iXO, 20);
-                        nodes.add(last);
-                        getChildren().addAll(new Line(iX, iY, iX + iXO, iY), last);
-                        last.setName(currentBracket.getBracket().get(location));
-                        bracketMap.put(last, location);
-                        nodeMap.put(location, last);
-                        setNodeEventListeners(last);
-                }
-
-                private void createNodePairs(int iX, int iY, int iXO, int iYO, int num, int increment) {
-                        if (num == 0 && increment == 0) {
-                                createSingleNode(iX, iY, iXO, iY - 20);
-                        } else {
-                                int y = iY;
-                                ArrayList<BracketNode> aNodeList = new ArrayList<>();
-                                for (int i = 0; i < num; i++) {
-                                        aNodeList.addAll(createNodePair(iX, iXO, iYO, y));
-                                        y += increment;
-                                }
-                                ArrayList<Integer> tmpHelp = helper(location, num);
-                                for (int j = 0; j < aNodeList.size(); j++) {
-                                        aNodeList.get(j).setName(currentBracket.getBracket().get(tmpHelp.get(j)));
-                                        bracketMap.put(aNodeList.get(j), tmpHelp.get(j));
-                                        nodeMap.put(tmpHelp.get(j), aNodeList.get(j));
-                                }
+                        createVertices(420, 200, 100, 20, 0, 0);
+                        createVertices(320, 119, 100, 200, 1, 0);
+                        createVertices(220, 60, 100, 100, 2, 200);
+                        createVertices(120, 35, 100, 50, 4, 100);
+                        createVertices(20, 25, 100, 25, 8, 50);
+                        for (BracketNode n : nodes) {
+                                n.setOnMouseClicked(clicked);
+                                n.setOnMouseEntered(enter);
+                                n.setOnMouseExited(exit);
                         }
                 }
 
-                private List<BracketNode> createNodePair(int iX, int iXO, int iYO, int y) {
-                        Point2D topLeft = new Point2D(iX, y);
-                        Point2D topRight = new Point2D(iX + iXO, y);
-                        Point2D bottomLeft = new Point2D(iX, y + iYO);
-                        Point2D bottomRight = new Point2D(iX + iXO, y + iYO);
+                /**
+                 * The secret sauce... well not really,
+                 * Creates 3 lines in appropriate location unless it is the last line.
+                 * Adds these lines and "BracketNodes" to the Pane of this inner class
+                 */
+                private void createVertices(int initialX, int initialY, int offsetX, int offsetY, int num, int increment) {
 
-                        BracketNode nodeTop = new BracketNode("", iX, y - 20, iXO, 20);
-                        BracketNode nodeBottom = new BracketNode("", iX, y + (iYO - 20), iXO, 20);
+                        if (num == 0 && increment == 0) {
+                                createSingleNode(initialX, initialY, offsetX);
+                        } else {
+                                createMultipleNodes(initialX, initialY, offsetX, offsetY, num, increment);
+                        }
 
-                        Line top = new Line(topLeft.getX(), topLeft.getY(), topRight.getX(), topRight.getY());
-                        Line bottom = new Line(bottomLeft.getX(), bottomLeft.getY(), bottomRight.getX(), bottomRight.getY());
-                        Line right = new Line(topRight.getX(), topRight.getY(), bottomRight.getX(), bottomRight.getY());
-
-                        getChildren().addAll(top, bottom, right, nodeTop, nodeBottom);
-
-                        setNodeEventListeners(nodeTop);
-                        setNodeEventListeners(nodeBottom);
-
-                        return Arrays.asList(nodeTop, nodeBottom);
                 }
 
-                private void setNodeEventListeners(BracketNode node) {
-                        node.setOnMouseClicked(clicked);
-                        node.setOnMouseEntered(enter);
-                        node.setOnMouseExited(exit);
+                private void createSingleNode(int x, int y, int offsetX) {
+                        BracketNode last = new BracketNode("", x, y - 20, offsetX, 20);
+                        nodes.add(last);
+                        getChildren().addAll(new Line(x, y, x + offsetX, y), last);
+                        last.setName(currentBracket.getBracket().get(location));
+                        bracketMap.put(last, location);
+                        nodeMap.put(location, last);
+                }
+
+                private void createMultipleNodes(int x, int y, int offsetX, int offsetY, int num, int increment) {
+                        ArrayList<BracketNode> nodeList = new ArrayList<>();
+
+                        for (int i = 0; i < num; i++) {
+                                Point2D topLeft = new Point2D(x, y);
+                                Point2D topRight = new Point2D(x + offsetX, y);
+                                Point2D bottomLeft = new Point2D(x, y + offsetY);
+                                Point2D bottomRight = new Point2D(x + offsetX, y + offsetY);
+
+                                BracketNode topNode = new BracketNode("", x, y - 20, offsetX, 20);
+                                BracketNode bottomNode = new BracketNode("", x, y + (offsetY - 20), offsetX, 20);
+
+                                nodeList.add(topNode);
+                                nodeList.add(bottomNode);
+                                nodes.add(topNode);
+                                nodes.add(bottomNode);
+
+                                Line top = new Line(topLeft.getX(), topLeft.getY(), topRight.getX(), topRight.getY());
+                                Line bottom = new Line(bottomLeft.getX(), bottomLeft.getY(), bottomRight.getX(), bottomRight.getY());
+                                Line right = new Line(topRight.getX(), topRight.getY(), bottomRight.getX(), bottomRight.getY());
+
+                                getChildren().addAll(top, bottom, right, topNode, bottomNode);
+                                y += increment;
+
+                        }
+                        updateNodes(nodeList, location, num);
+
+                }
+
+                private void updateNodes(ArrayList<BracketNode> nodeList, int location, int num){
+                        ArrayList<Integer> indices = helper(location, num);
+                        for (int i = 0; i < nodeList.size(); i++) {
+                                BracketNode node = nodeList.get(i);
+                                int index = indices.get(i);
+                                node.setName(currentBracket.getBracket().get(index));
+                                bracketMap.put(node, index);
+                                nodeMap.put(index, node);
+                        }
                 }
         }
-
 
         /**
          * The BracketNode model for the Graphical display of the "Bracket"
          */
-        private static class BracketNode extends Pane {
+        private class BracketNode extends Pane {
                 private String teamName;
-                private final Label name;
+                private Rectangle rect;
+                private Label name;
+
+                public BracketNode() {
+                        teamName = "";
+                        rect = new Rectangle(5, 2);;
+                        name = new Label(teamName);
+                }
 
                 /**
                  * Creates a BracketNode with,
@@ -456,9 +478,10 @@ public class BracketPane extends BorderPane {
                         this.setLayoutY(y);
                         this.setMaxSize(rX, rY);
                         this.teamName = teamName;
-                        Rectangle rect = new Rectangle(rX, rY);
+                        rect = new Rectangle(rX, rY);
                         rect.setFill(Color.TRANSPARENT);
                         name = new Label(teamName);
+                        // setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
                         name.setTranslateX(5);
                         getChildren().addAll(name, rect);
                 }
