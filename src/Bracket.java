@@ -6,10 +6,10 @@ import java.io.Serializable;
  * @author Matt, Dan, Hillary
  * @since 5/1/2017
  */
-public class Bracket implements Serializable
-{
+public class Bracket implements Serializable {
+    private final static int NUM_OF_TEAM_SCORES = 127;
     private final ArrayList<String> bracket;
-    private final transient int[] teamScores = new int[Byte.MAX_VALUE];
+    private final transient int[] teamScores = new int[NUM_OF_TEAM_SCORES];
     private String playerName;
     private String password;
     public static final long serialVersionUID = 5609181678399742983L;
@@ -20,7 +20,7 @@ public class Bracket implements Serializable
      */
     public Bracket(ArrayList<String> starting){
         bracket = new ArrayList<>(starting);
-        while (bracket.size() < Byte.MAX_VALUE) {
+        while (bracket.size() < NUM_OF_TEAM_SCORES) {
             bracket.add(0,""); // FIXME: 4/2/2023 Adding empty strings may unnecessary
         }
     }
