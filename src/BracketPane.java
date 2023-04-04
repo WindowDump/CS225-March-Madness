@@ -37,7 +37,7 @@ public class BracketPane extends BorderPane {
         /**
          * Used to initiate the paint of the bracket nodes
          */
-        private static boolean isTop = true; // HIGHLIGHT: Does nothing
+        private static boolean isTop = true;
         /**
          * Maps the text "buttons" to it's respective grid-pane
          */
@@ -56,7 +56,7 @@ public class BracketPane extends BorderPane {
         private boolean finalized;
         /**
          * Important logical simplification for allowing for code that is easier
-         * to maintain.
+         * to maintain.https://github.com/The1PhoenixKing/CS225-March-Madness-Improvements/blob/master/src/TournamentInfo.java
          */
         private HashMap<BracketNode, Integer> bracketMap = new HashMap<>();
         /**
@@ -78,8 +78,10 @@ public class BracketPane extends BorderPane {
         }
         
         
-        public void clear(){
+        public int clear(){
             clearSubtree(displayedSubtree);
+            
+            return displayedSubtree;
         }
 
         /**
@@ -152,7 +154,7 @@ public class BracketPane extends BorderPane {
          * Initializes the properties needed to construct a bracket.
          */
         public BracketPane(Bracket currentBracket) {
-                displayedSubtree=0;
+                displayedSubtree=0; //seems to not do anything? Dov Z
                 this.currentBracket = currentBracket;
 
                 bracketMap = new HashMap<>();
@@ -169,8 +171,8 @@ public class BracketPane extends BorderPane {
                 buttons.add(customButton("MIDWEST"));
                 buttons.add(customButton("SOUTH"));
                 buttons.add(customButton("FULL"));
-
-                ArrayList<GridPane> gridPanes = new ArrayList<>();
+                //not currently used, Dov Z
+               // ArrayList<GridPane> gridPanes = new ArrayList<>();
 
                 for (int m = 0; m < buttons.size() - 1; m++) {
                         roots.add(new Root(3 + m));
@@ -223,7 +225,9 @@ public class BracketPane extends BorderPane {
                                 center.setAlignment(Pos.CENTER);
                                 setCenter(center);
                                 //Grant 5/7 this is for clearing the tree it kind of works 
+                                //Grant what does this mean Dov Z
                                 displayedSubtree=buttons.indexOf(t)==7?0:buttons.indexOf(t)+3;
+                                if(displayedSubtree == 7) displayedSubtree = 0;
                         });
                 }
 
@@ -263,7 +267,9 @@ public class BracketPane extends BorderPane {
          * @param position The position to clear after
          */
         public void clearSubtree(int position) {
+        	//System.out.println(position);
                 currentBracket.resetSubtree(position);
+                
         }
 
         /**
@@ -313,39 +319,38 @@ public class BracketPane extends BorderPane {
                 pane.setStyle("-fx-background-color: orange;");
                 return pane;
         }
-
+        
+        //commented sections now looped, Dov Z
         public Pane createFinalFour() {
                 Pane finalPane = new Pane();
+                
+                BracketNode[] nodeArr = new BracketNode[3];
+                
                 BracketNode nodeFinal0 = new BracketNode("", 162, 300, 70, 0);
                 BracketNode nodeFinal1 = new BracketNode("", 75, 400, 70, 0);
                 BracketNode nodeFinal2 = new BracketNode("", 250, 400, 70, 0);
-                nodeFinal0.setName(currentBracket.getBracket().get(0));
-                nodeFinal1.setName(currentBracket.getBracket().get(1));
-                nodeFinal2.setName(currentBracket.getBracket().get(2));
-                finalPane.getChildren().add(nodeFinal0);
-                finalPane.getChildren().add(nodeFinal1);
-                finalPane.getChildren().add(nodeFinal2);
+                
+                nodeArr[0] = nodeFinal0;
+                nodeArr[1] = nodeFinal1;
+                nodeArr[2] = nodeFinal2;
+                
+                for(int i = 0; i < nodeArr.length; i++) {
+                	nodeArr[i].setName(currentBracket.getBracket().get(i));
+                	finalPane.getChildren().add(nodeArr[i]);
+                	nodeArr[i].setOnMouseClicked(clicked);
+                    nodeArr[i].setOnMouseDragEntered(enter);
+                    nodeArr[i].setOnMouseDragExited(exit);
+                    nodeArr[i].setStyle("-fx-border-color: darkblue");
+                }
+                
+                
                 bracketMap.put(nodeFinal1, 1);
                 bracketMap.put(nodeFinal2, 2);
                 bracketMap.put(nodeFinal0, 0);
                 nodeMap.put(1, nodeFinal1);
                 nodeMap.put(2, nodeFinal2);
                 nodeMap.put(0, nodeFinal0);
-
-                nodeFinal0.setOnMouseClicked(clicked);
-                nodeFinal0.setOnMouseDragEntered(enter);
-                nodeFinal0.setOnMouseDragExited(exit);
-
-                nodeFinal1.setOnMouseClicked(clicked);
-                nodeFinal1.setOnMouseDragEntered(enter);
-                nodeFinal1.setOnMouseDragExited(exit);
-
-                nodeFinal2.setOnMouseClicked(clicked);
-                nodeFinal2.setOnMouseDragEntered(enter);
-                nodeFinal2.setOnMouseDragExited(exit);
-                nodeFinal0.setStyle("-fx-border-color: darkblue");
-                nodeFinal1.setStyle("-fx-border-color: darkblue");
-                nodeFinal2.setStyle("-fx-border-color: darkblue");
+         
                 finalPane.setMinWidth(400.0);
 
                 return finalPane;
@@ -404,7 +409,7 @@ public class BracketPane extends BorderPane {
                                         Line bottom = new Line(bl.getX(), bl.getY(), br.getX(), br.getY());
                                         Line right = new Line(tr.getX(), tr.getY(), br.getX(), br.getY());
                                         getChildren().addAll(top, bottom, right, nTop, nBottom);
-                                        isTop = !isTop; // HIGHLIGHT: Only usage of isTop
+                                        isTop = !isTop;
                                         y += increment;
                                 }
                                 ArrayList<Integer> tmpHelp = helper(location, num);

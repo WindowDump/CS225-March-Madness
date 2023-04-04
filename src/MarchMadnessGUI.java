@@ -51,7 +51,7 @@ public class MarchMadnessGUI extends Application {
     private Button scoreBoardButton;
     private Button viewBracketButton;
     private Button clearButton;
-    private Button resetButton;
+    //private Button resetButton;
     private Button finalizeButton;
     
     //allows you to navigate back to division selection screen
@@ -197,17 +197,23 @@ public class MarchMadnessGUI extends Application {
      */
     private void clear(){
       
+      int pos = bracketPane.clear();
       
-      bracketPane.clear();
-      bracketPane=new BracketPane(selectedBracket);
+      if(pos == 0) {
+    	  selectedBracket=new Bracket(startingBracket);
+          bracketPane=new BracketPane(selectedBracket);
+      }
+     
+      else {
+    	 bracketPane=new BracketPane(selectedBracket);
+      }
       displayPane(bracketPane);
         
     }
     
     /**
      * resets entire bracket
-     */
-    private void reset(){
+     * private void reset(){
         if(confirmReset()){
             //horrible hack to reset
             selectedBracket=new Bracket(startingBracket);
@@ -215,6 +221,9 @@ public class MarchMadnessGUI extends Application {
             displayPane(bracketPane);
         }
     }
+    
+     * 
+     */
     
     private void finalizeBracket(){
        if(bracketPane.isComplete()){
@@ -262,7 +271,7 @@ public class MarchMadnessGUI extends Application {
         scoreBoardButton=new Button("ScoreBoard");
         viewBracketButton= new Button("View Simulated Bracket");
         clearButton=new Button("Clear");
-        resetButton=new Button("Reset");
+       // resetButton=new Button("Reset");
         finalizeButton=new Button("Finalize");
         toolBar.getItems().addAll(
                 createSpacer(),
@@ -275,7 +284,7 @@ public class MarchMadnessGUI extends Application {
         btoolBar.getItems().addAll(
                 createSpacer(),
                 clearButton,
-                resetButton,
+      //          resetButton,
                 finalizeButton,
                 back=new Button("Choose Division"),
                 createSpacer()
@@ -291,7 +300,7 @@ public class MarchMadnessGUI extends Application {
         scoreBoardButton.setOnAction(e->scoreBoard());
         viewBracketButton.setOnAction(e->viewBracket());
         clearButton.setOnAction(e->clear());
-        resetButton.setOnAction(e->reset());
+        //resetButton.setOnAction(e->reset());
         finalizeButton.setOnAction(e->finalizeBracket());
         back.setOnAction(e->{
             bracketPane=new BracketPane(selectedBracket);
