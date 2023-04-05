@@ -37,7 +37,7 @@ public class BracketPane extends BorderPane {
         /**
          * Used to initiate the paint of the bracket nodes
          */
-        private static boolean isTop = true;
+ //       private static boolean isTop = true;
         /**
          * Maps the text "buttons" to it's respective grid-pane
          */
@@ -93,7 +93,11 @@ public class BracketPane extends BorderPane {
                         BracketNode n = (BracketNode) mouseEvent.getSource();
                         int treeNum = bracketMap.get(n);
                         int nextTreeNum = (treeNum - 1) / 2;
-                        if (!nodeMap.get(nextTreeNum).getName().equals(n.getName())) {
+                        //opponentTreeNum stuff by Dov
+                        int opponentTreeNum = 2 * nextTreeNum + 1;
+                        if(opponentTreeNum == treeNum) opponentTreeNum = 2 * nextTreeNum + 2;
+                        
+                        if (!nodeMap.get(nextTreeNum).getName().equals(n.getName()) && !nodeMap.get(opponentTreeNum).getName().equals("")) {
                                 currentBracket.removeAbove((nextTreeNum));
                                 clearAbove(treeNum);
                                 nodeMap.get((bracketMap.get(n) - 1) / 2).setName(n.getName());
@@ -409,7 +413,7 @@ public class BracketPane extends BorderPane {
                                         Line bottom = new Line(bl.getX(), bl.getY(), br.getX(), br.getY());
                                         Line right = new Line(tr.getX(), tr.getY(), br.getX(), br.getY());
                                         getChildren().addAll(top, bottom, right, nTop, nBottom);
-                                        isTop = !isTop;
+                                       // isTop = !isTop;
                                         y += increment;
                                 }
                                 ArrayList<Integer> tmpHelp = helper(location, num);
