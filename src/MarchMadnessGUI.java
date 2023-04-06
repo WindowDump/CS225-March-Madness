@@ -201,6 +201,7 @@ public class MarchMadnessGUI extends Application{
       else {
     	 bracketPane=new BracketPane(selectedBracket);
       }
+      bracketPane.switchToRegion(pos);
       displayPane(bracketPane);
         
     }
