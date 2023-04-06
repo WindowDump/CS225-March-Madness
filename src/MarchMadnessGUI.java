@@ -414,7 +414,7 @@ public class MarchMadnessGUI extends Application{
      * @return
      */
     private String[] getUsers() {
-        File userDir = new File(".\\");
+        File userDir = new File(".");
         String[] files = userDir.list();
         LinkedList<String> userList = new LinkedList<String>();
         for (String s: files) {
