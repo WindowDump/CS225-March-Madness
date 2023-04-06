@@ -18,11 +18,11 @@ public class Bracket implements Serializable {
     public static final long serialVersionUID = 5609181678399742983L;
 
     /**
-     * Constructor using an ArrayList of strings to start
-     * @param starting and arraylist containing the 64 teams participating in the tournament
+     * Creates a new bracket containing the teams specified in the list passed in as an argument.
+     * @param teams A list containing the 64 teams competing in the tournament.
      */
-    public Bracket(ArrayList<String> starting){
-        bracket = new ArrayList<>(starting);
+    public Bracket(ArrayList<String> teams){
+        bracket = new ArrayList<>(teams);
         while (bracket.size() < NUM_OF_TEAM_SCORES) {
             bracket.add(0,""); // FIXME: 4/2/2023 Adding empty strings may unnecessary
         }
