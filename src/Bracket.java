@@ -61,6 +61,8 @@ public class Bracket implements Serializable {
      */
     public void moveTeamUp(int position) {
         int newPos = ((position - 1) / 2);
+
+        /* Check that the team isn't already in the destination position. */
         if (!bracket.get(position).equals(bracket.get(newPos))) {
             bracket.set(newPos, bracket.get(position));
         }
