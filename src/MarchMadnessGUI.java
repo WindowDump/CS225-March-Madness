@@ -398,6 +398,7 @@ public class MarchMadnessGUI extends Application{
 
                     playerMap.put(name, tmpPlayerBracket);
                     selectedBracket = tmpPlayerBracket;
+                    enterUser.getItems().add(name);
                     //alert user that an account has been created
                     infoAlert("No user with the Username \""  + name + "\" exists. A new account has been created.");
                     chooseBracket();
