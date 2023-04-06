@@ -24,7 +24,7 @@ public class Bracket implements Serializable {
     public Bracket(ArrayList<String> teams){
         bracket = new ArrayList<>(teams);
         while (bracket.size() < NUM_OF_TEAM_SCORES) {
-            bracket.add(0,""); // FIXME: 4/2/2023 Adding empty strings may unnecessary
+            bracket.add(0,"");
         }
     }
 
