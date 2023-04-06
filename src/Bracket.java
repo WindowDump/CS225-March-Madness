@@ -26,6 +26,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
      */
     public Bracket(ArrayList<String> starting){
         bracket = new ArrayList<String>(starting);
+        //after loading starting teams, then fills the rest of the tree with blanks? Dov Z
         while(bracket.size()<127){
             bracket.add(0,"");
         }
@@ -85,12 +86,16 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
 
     /**
      * added by matt 5/1
-     * resets all children of root location except for initail teams at final children
+     * resets all children of root location except for initial teams at final children
      * special behavior if root = 0; just resets the final 4
+     * 
+     *I think in order to use this method to clear the whole board, it should be called once for  the final four
+     *and then again either for each other subtree OR modified to clear all subtrees on one call. Dov Z
+     * 
      * @param root, everything below and including this is reset
      */
     public void resetSubtree(int root){
-        if (root ==0){//special behavior to reset final 4
+        if (root == 0){//special behavior to reset final 4
             for (int i = 0; i < 7; i++) {
                 bracket.set(i,"");
             }
@@ -131,10 +136,12 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
      * used for creating new brackets
      * @param position, index to add new value
      * @param s, string added to bracket
+     * 
+     * Removed due to not used, Dov Z
      */
-    private void add(int position, String s){
-        bracket.add(position, s);
-    }
+   // private void add(int position, String s){
+   //     bracket.add(position, s);
+   // }
 
     /** 
      * Hillary Ssemakula:
