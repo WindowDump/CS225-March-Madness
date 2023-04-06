@@ -68,10 +68,11 @@ public class Bracket implements Serializable {
     }
 
     /**
-     * added by matt 5/1
-     * resets all children of root location except for initail teams at final children
-     * special behavior if root = 0; just resets the final 4
+     * Resets all children of root location except for initial teams at final children
+     * special behavior if root = 0; just resets the final 4.
      * @param root everything below and including this is reset
+     * @author Matt
+     * @since 5/1
      */
     public void resetSubtree(int root) {
         if (root == 0) {//special behavior to reset final 4
