@@ -55,9 +55,8 @@ public class Bracket implements Serializable {
     }
 
     /**
-     * Moves a team up the bracket
-     * updated by matt 5/7, now removesAbove anytime the above position is not equal to the clicked one
-     * @param position, the starting position of the team to be moved
+     * Moves a team up the bracket.
+     * @param position The starting position of the team to be moved.
      */
     public void moveTeamUp(int position) {
         int newPos = ((position - 1) / 2);
