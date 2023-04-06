@@ -1,25 +1,19 @@
 //package marchmadness;
 
+
 import java.io.*;
 import java.security.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
+
 import javafx.application.Application;
+
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -28,7 +22,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import javax.crypto.Cipher;
+
 
 
 /**
@@ -39,7 +33,7 @@ import javax.crypto.Cipher;
  *
  * @author Grant Osborn
  */
-public class MarchMadnessGUI extends Application {
+public class MarchMadnessGUI extends Application{
     
     
     //all the gui ellements
@@ -332,8 +326,11 @@ public class MarchMadnessGUI extends Application {
         Label userName = new Label("User Name: ");
         loginPane.add(userName, 0, 1);
 
-        TextField enterUser = new TextField();
+        //TextField enterUser = new TextField()
+        String[] userList = getUsers();  // added to get list of saved users in directory -KF
+        ComboBox<String> enterUser = new ComboBox<String>(FXCollections.observableArrayList(userList)); //adds a ComboBox to the pane -KF
         loginPane.add(enterUser, 1, 1);
+        enterUser.setEditable(true); // allows you to still enter new names - KF
 
         Label password = new Label("Password: ");
         loginPane.add(password, 0, 2);
@@ -351,7 +348,7 @@ public class MarchMadnessGUI extends Application {
         signButton.setOnAction(event -> {
 
             // the name user enter
-            String name = enterUser.getText();
+            String name = enterUser.getValue();
             // the password user enter
             String playerPass = passwordField.getText();
 
@@ -401,7 +398,24 @@ public class MarchMadnessGUI extends Application {
         
         return loginPane;
     }
-    
+
+    /**
+     * Function to return a String array of all usernames via looking at the directory and finding all .ser files
+     * @return
+     */
+    private String[] getUsers() {
+        File userDir = new File(".\\");
+        String[] files = userDir.list();
+        LinkedList<String> userList = new LinkedList<String>();
+        for (String s: files) {
+            if (s.endsWith(".ser")) {
+                userList.add(s.split(".ser")[0]);
+            }
+        }
+        return userList.toArray(new String[0]);
+
+    }
+
     /**
      * addAllToMap
      * adds all the brackets to the map for login
@@ -542,5 +556,6 @@ public class MarchMadnessGUI extends Application {
         hashString = new String(hashBytes, "UTF-8");
         return hashString;
     }
+
        
 }
